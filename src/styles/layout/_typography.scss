@@ -1,0 +1,81 @@
+@use "../config/variables" as *;
+
+// 5-size scale, 1.25 ratio, fixed rem (product register)
+:root {
+  --text-caption: 0.75rem; // 12px
+  --text-sm: 0.875rem; // 14px
+  --text-body: 1rem; // 16px
+  --text-lg: 1.25rem; // 20px
+  --text-xl: 1.5625rem; // ~25px
+  --text-2xl: 1.953rem; // ~31px
+  --text-display: 2.441rem; // ~39px
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-body: 1.6;
+}
+
+body {
+  font-family: $font-body;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-ink);
+  font-kerning: normal;
+}
+
+// Serif is a deliberate accent (wordmark, trip title) — everything else
+// carries hierarchy through the body sans at weight + size, not a second
+// heading font throughout.
+h1,
+.font-display {
+  font-family: $font-display;
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-2xl);
+}
+
+h2,
+h3 {
+  font-family: $font-body;
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: var(--text-xl);
+}
+
+h3 {
+  font-size: var(--text-lg);
+}
+
+p {
+  max-width: 65ch;
+}
+
+small,
+.text-caption {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+}
+
+.text-sm {
+  font-size: var(--text-sm);
+}
+
+a {
+  color: var(--color-primary-hover);
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}

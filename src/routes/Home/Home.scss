@@ -1,0 +1,152 @@
+@use "../../styles/config" as *;
+
+.home {
+  padding-block: $space-xl $space-3xl;
+
+  @include respond(phone) {
+    padding-block: $space-lg $space-2xl;
+  }
+}
+
+.home__intro {
+  margin-bottom: $space-lg;
+
+  h1 {
+    margin-bottom: $space-2xs;
+  }
+
+  p {
+    color: var(--color-muted);
+  }
+}
+
+.home__toolbar {
+  margin-bottom: $space-lg;
+}
+
+.home__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-sm;
+  text-align: center;
+  color: var(--color-muted);
+  padding: $space-2xl $space-md;
+  border: 1px dashed var(--color-border);
+  border-radius: $radius-lg;
+}
+
+.home__list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2xs;
+}
+
+.trip-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: $space-sm $space-md;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-surface-raised);
+  color: var(--color-ink);
+  transition:
+    border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    transform 0.15s ease-out;
+
+  &:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+}
+
+// Stretched link: the whole card is clickable via this absolutely-positioned
+// anchor, while TripMenu stays a normal (later, on-top) sibling so its button
+// isn't nested inside the <a>.
+.trip-card__link {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  padding: inherit;
+  padding-right: $space-2xl;
+  border-radius: inherit;
+  color: inherit;
+
+  @include focus-ring;
+}
+
+.trip-card > .trip-menu {
+  margin-left: auto;
+}
+
+.trip-card__icon {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  color: var(--color-primary-hover);
+}
+
+.trip-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-card__name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trip-card__date {
+  color: var(--color-muted);
+}
+
+.trip-card__chevron {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+
+.new-trip-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  input {
+    min-height: 44px;
+    padding-inline: $space-sm;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    font-weight: 400;
+
+    @include focus-ring;
+  }
+}
+
+.new-trip-form__error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}

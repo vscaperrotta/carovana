@@ -1,0 +1,24 @@
+@use "./config" as *;
+@use "./layout";
+
+body {
+  background: var(--color-bg);
+}
+
+.container {
+  width: min(100% - #{$space-lg * 2}, 72rem);
+  margin-inline: auto;
+
+  @include respond(phone) {
+    width: min(100% - #{$space-sm * 2}, 72rem);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

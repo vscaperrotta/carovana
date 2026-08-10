@@ -1,0 +1,106 @@
+@use "../../styles/config" as *;
+
+.trip-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.trip-menu__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--color-muted);
+
+  @include focus-ring;
+
+  &:hover {
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+}
+
+.trip-menu__dropdown {
+  position: absolute;
+  top: calc(100% + #{$space-3xs});
+  right: 0;
+  z-index: $z-sticky + 1;
+  min-width: 11rem;
+  padding: $space-3xs;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-surface-raised);
+  box-shadow: $shadow-md;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3xs;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: $space-2xs;
+    width: 100%;
+    min-height: 40px;
+    padding-inline: $space-sm;
+    border-radius: $radius-sm;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-ink);
+    text-align: left;
+
+    @include focus-ring;
+
+    &:hover {
+      background: var(--color-surface);
+    }
+  }
+}
+
+.trip-menu__item--danger {
+  color: var(--color-danger);
+
+  &:hover {
+    background: color-mix(in oklch, var(--color-danger) 12%, transparent) !important;
+  }
+}
+
+.rename-trip-form,
+.delete-trip-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  input {
+    min-height: 44px;
+    padding-inline: $space-sm;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    font-weight: 400;
+
+    @include focus-ring;
+  }
+}
+
+.rename-trip-form__error,
+.delete-trip-form__error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+.delete-trip-form__warning {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}

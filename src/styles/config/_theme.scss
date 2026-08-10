@@ -1,0 +1,58 @@
+@use "variables" as *;
+
+:root {
+  // Brand
+  --color-primary: oklch(0.68 0.15 118); // olive-chartreuse, sunlit foliage
+  --color-primary-hover: oklch(0.62 0.15 118);
+  --color-primary-ink: oklch(0.99 0 0);
+  --color-accent: oklch(0.46 0.17 35); // burnt terracotta
+  --color-accent-hover: oklch(0.4 0.17 35);
+  --color-accent-ink: oklch(0.99 0 0);
+
+  // Surfaces
+  --color-bg: oklch(1 0 0);
+  --color-surface: oklch(0.97 0.012 118);
+  --color-surface-raised: oklch(1 0 0);
+  --color-border: oklch(0.89 0.014 118);
+
+  // Text
+  --color-ink: oklch(0.22 0.02 118);
+  --color-muted: oklch(0.5 0.014 118);
+  --color-muted-on-surface: oklch(0.46 0.014 118);
+
+  // Feedback
+  --color-danger: oklch(0.5 0.19 25);
+  --color-danger-ink: oklch(0.99 0 0);
+
+  // Elevation
+  --shadow-sm: #{$shadow-sm};
+  --shadow-md: #{$shadow-md};
+  --shadow-lg: #{$shadow-lg};
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: oklch(0.72 0.14 118);
+    --color-primary-hover: oklch(0.78 0.14 118);
+    --color-primary-ink: oklch(0.14 0.02 118);
+    --color-accent: oklch(0.68 0.16 35);
+    --color-accent-hover: oklch(0.74 0.16 35);
+    --color-accent-ink: oklch(0.14 0.02 35);
+
+    --color-bg: oklch(0.16 0.012 118);
+    --color-surface: oklch(0.21 0.014 118);
+    --color-surface-raised: oklch(0.25 0.014 118);
+    --color-border: oklch(0.32 0.016 118);
+
+    --color-ink: oklch(0.94 0.006 118);
+    --color-muted: oklch(0.68 0.012 118);
+    --color-muted-on-surface: oklch(0.72 0.012 118);
+
+    --color-danger: oklch(0.62 0.19 25);
+    --color-danger-ink: oklch(0.12 0 0);
+
+    color-scheme: dark;
+  }
+}

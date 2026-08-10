@@ -1,0 +1,35 @@
+@use "../../styles/config" as *;
+
+.person-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2xs;
+}
+
+.person-badge__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: oklch(0.99 0 0);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
+}
+
+.person-badge--sm .person-badge__avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.person-badge--md .person-badge__avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 0.8rem;
+}
+
+.person-badge__name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}

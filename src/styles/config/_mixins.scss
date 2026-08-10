@@ -1,0 +1,50 @@
+@use "variables" as *;
+
+// MEDIA QUERY MANAGER (mobile-first content, max-width breakpoints)
+// respond(phone)     -> <= 480px
+// respond(tab-port)  -> <= 768px
+// respond(tab-land)  -> <= 1024px
+// respond(desktop)   -> <= 1280px
+@mixin respond($breakpoint) {
+  @if $breakpoint==desktop {
+    @media only screen and (max-width: $break-desk) {
+      @content;
+    }
+  }
+  @if $breakpoint==tab-land {
+    @media only screen and (max-width: $break-tablet-land) {
+      @content;
+    }
+  }
+  @if $breakpoint==tab-port {
+    @media only screen and (max-width: $break-tablet-port) {
+      @content;
+    }
+  }
+  @if $breakpoint==phone {
+    @media only screen and (max-width: $break-phone) {
+      @content;
+    }
+  }
+}
+
+// Expands a small visual element to a 44x44 minimum hit area without affecting layout
+@mixin touch-target {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+  }
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}

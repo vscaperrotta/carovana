@@ -1,0 +1,114 @@
+@use "../../styles/config" as *;
+
+.place-card {
+  display: flex;
+  gap: $space-sm;
+  padding: $space-sm;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-surface-raised);
+}
+
+.place-card--top {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.place-card__icon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.place-card__icon--stay {
+  background: color-mix(in oklch, var(--color-primary) 18%, var(--color-surface));
+  color: var(--color-primary-hover);
+}
+
+.place-card__icon--poi {
+  background: color-mix(in oklch, var(--color-accent) 18%, var(--color-surface));
+  color: var(--color-accent);
+}
+
+.place-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.place-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: $space-2xs;
+  flex-wrap: wrap;
+}
+
+.place-card__title {
+  font-weight: 600;
+}
+
+.place-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3xs;
+  padding: 0.15rem $space-xs;
+  border-radius: $radius-pill;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.place-card__address {
+  color: var(--color-muted);
+  margin-top: 0.15rem;
+}
+
+.place-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  margin-top: $space-xs;
+}
+
+.place-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3xs;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary-hover);
+
+  @include focus-ring;
+}
+
+.place-card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $space-xs;
+  flex-shrink: 0;
+}
+
+.place-card__delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--color-muted);
+
+  @include focus-ring;
+
+  &:hover {
+    background: color-mix(in oklch, var(--color-danger) 12%, transparent);
+    color: var(--color-danger);
+  }
+}

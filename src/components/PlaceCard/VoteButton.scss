@@ -1,0 +1,47 @@
+@use "../../styles/config" as *;
+
+.vote-button {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3xs;
+  padding: $space-3xs $space-xs;
+  border-radius: $radius-pill;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  min-height: 36px;
+  transition:
+    background-color 0.15s ease-out,
+    color 0.15s ease-out,
+    border-color 0.15s ease-out,
+    transform 0.1s ease-out;
+
+  @include focus-ring;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.vote-button--active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-ink);
+
+  &:hover:not(:disabled) {
+    color: var(--color-accent-ink);
+    opacity: 0.9;
+  }
+}
