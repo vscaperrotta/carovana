@@ -65,6 +65,8 @@ const RoutesPanel = ({ tripId, places, routes }) => {
 
   const placeTitle = (placeId) => places.find((place) => place.id === placeId)?.title ?? '?';
   const quotaLow = quota.remaining != null && quota.limit != null && quota.remaining / quota.limit < 0.1;
+  const stays = places.filter((place) => place.type === 'stay');
+  const pois = places.filter((place) => place.type === 'poi');
 
   return (
     <div className="routes-panel">
@@ -75,11 +77,7 @@ const RoutesPanel = ({ tripId, places, routes }) => {
             <option value="" disabled>
               {t('routes.fromLabel')}
             </option>
-            {places.map((place) => (
-              <option key={place.id} value={place.id}>
-                {place.title}
-              </option>
-            ))}
+            <PlaceOptions stays={stays} pois={pois} />
           </select>
         </label>
 
@@ -89,11 +87,7 @@ const RoutesPanel = ({ tripId, places, routes }) => {
             <option value="" disabled>
               {t('routes.toLabel')}
             </option>
-            {places.map((place) => (
-              <option key={place.id} value={place.id}>
-                {place.title}
-              </option>
-            ))}
+            <PlaceOptions stays={stays} pois={pois} />
           </select>
         </label>
 
@@ -139,6 +133,34 @@ const RoutesPanel = ({ tripId, places, routes }) => {
       )}
     </div>
   );
+};
+
+const PlaceOptions = ({ stays, pois }) => (
+  <>
+    {stays.length > 0 && (
+      <optgroup label={t('places.sectionStays')}>
+        {stays.map((place) => (
+          <option key={place.id} value={place.id}>
+            {place.title}
+          </option>
+        ))}
+      </optgroup>
+    )}
+    {pois.length > 0 && (
+      <optgroup label={t('places.sectionPois')}>
+        {pois.map((place) => (
+          <option key={place.id} value={place.id}>
+            {place.title}
+          </option>
+        ))}
+      </optgroup>
+    )}
+  </>
+);
+
+PlaceOptions.propTypes = {
+  stays: PropTypes.array.isRequired,
+  pois: PropTypes.array.isRequired,
 };
 
 RoutesPanel.propTypes = {

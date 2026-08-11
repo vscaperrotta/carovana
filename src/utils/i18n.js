@@ -98,6 +98,15 @@ const strings = {
   'people.placeholder': { it: 'Aggiungi una persona al viaggio', en: 'Add a person to the trip' },
   'people.add': { it: 'Aggiungi', en: 'Add' },
   'people.you': { it: 'Tu', en: 'You' },
+  'people.renameAria': { it: 'Rinomina {{name}}', en: 'Rename {{name}}' },
+  'people.renameTitle': { it: 'Rinomina persona', en: 'Rename person' },
+  'people.renameSubmit': { it: 'Salva', en: 'Save' },
+  'people.renaming': { it: 'Salvo…', en: 'Saving…' },
+  'people.removeAria': { it: 'Rimuovi {{name}}', en: 'Remove {{name}}' },
+  'people.removeConfirm': {
+    it: 'Rimuovere {{name}} dal viaggio? I suoi voti verranno rimossi.',
+    en: "Remove {{name}} from the trip? Their votes will be removed.",
+  },
 
   'addPlace.stay': { it: 'Alloggio', en: 'Stay' },
   'addPlace.poi': { it: 'Punto di interesse', en: 'Point of interest' },
@@ -178,6 +187,14 @@ const strings = {
   'errors.addPerson': {
     it: 'Non riesco ad aggiungere la persona. Controlla la connessione e riprova.',
     en: "Can't add the person. Check your connection and try again.",
+  },
+  'errors.renamePerson': {
+    it: 'Non riesco a rinominare la persona. Controlla la connessione e riprova.',
+    en: "Can't rename the person. Check your connection and try again.",
+  },
+  'errors.deletePerson': {
+    it: 'Non riesco a rimuovere la persona. Controlla la connessione e riprova.',
+    en: "Can't remove the person. Check your connection and try again.",
   },
   'errors.addPlace': {
     it: 'Non riesco ad aggiungere il luogo. Controlla la connessione e riprova.',

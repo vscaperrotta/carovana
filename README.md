@@ -14,11 +14,19 @@
 
 ## What it does
 
-- Create a trip, share the link — no account needed.
-- Add accommodations and points of interest (from a link or a pin on the map), all plotted on one map.
-- Mark who's coming and vote to converge on the place to book.
+- Create a trip (name + dates), share the link — no account needed. Edit the
+  trip or a place any time, same popup as creation, just pre-filled.
+- Add accommodations and points of interest (from a link or a pin on the map),
+  each with an optional price, all plotted on one map.
+- Mark who's coming, rename or remove someone (everyone's trusted, no
+  admin), and vote to converge on the place to book. Price and vote count
+  show right on the map pin and in its popup.
 - Draw walking routes between two places, with distance and duration.
-- Everything in real time: open the map together and choose, without scrolling through 40 chat messages.
+- The trip list shows a timeline (soonest trip first) with a participant
+  count per trip.
+- Everything in real time: open the map together and choose, without
+  scrolling through 40 chat messages.
+- A "Got feedback?" link on the home page for quick bug reports/ideas.
 
 ## Stack
 
@@ -136,7 +144,7 @@ included in the bundle.
 ```
 trips/{tripId}                        { name, startDate, endDate, createdAt }
 trips/{tripId}/people/{personId}      { name, createdAt }
-trips/{tripId}/places/{placeId}       { type: 'stay' | 'poi', title, url, address, lat, lng,
+trips/{tripId}/places/{placeId}       { type: 'stay' | 'poi', title, price, url, address, lat, lng,
                                          addedBy, addedByName, createdAt, votes: { [personId]: true } }
 trips/{tripId}/routes/{routeId}       { fromPlaceId, toPlaceId, profile: 'foot-walking',
                                          geometry: [{ lat, lng }, ...], distanceMeters, durationSeconds,
@@ -152,7 +160,20 @@ single listener per trip.
 No authentication. On first visiting a trip, each person picks their own
 name from the participant list (or adds it) — the choice stays in
 `localStorage` on that device. It's only needed to add places and vote;
-viewing is always open.
+viewing is always open. Anyone can rename or remove anyone from the
+People tab (no owner/admin tier); removing someone also strips their
+votes from every place so counts don't stay inflated by someone who's no
+longer in the trip. Renaming or removing yourself updates your own
+device's stored identity immediately.
+
+## Feedback
+
+The "Got feedback?" modal on the home page posts to
+[FormSubmit](https://formsubmit.co) (`formsubmit.co/ajax/nofantasystudio@gmail.com`),
+a zero-config form-relay for static/client-only sites — no backend, no API
+key. **First submission to a new destination email requires a one-time
+confirmation click** sent by FormSubmit to that inbox; after that, every
+submission delivers straight through.
 
 ## Notes
 

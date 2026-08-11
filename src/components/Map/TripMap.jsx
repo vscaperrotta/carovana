@@ -98,7 +98,7 @@ const TripMap = ({ tripId, places, routes, pickMode, onPick }) => {
         <Polyline
           key={route.id}
           positions={route.geometry}
-          pathOptions={{ color: 'var(--color-accent)', weight: 4, opacity: 0.7, dashArray: '6 6' }}
+          pathOptions={{ color: '#38bdf8', weight: 4, opacity: 0.85 }}
         />
       ))}
       {places.map((place) => (

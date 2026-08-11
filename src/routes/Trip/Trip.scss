@@ -18,6 +18,18 @@
   margin-left: auto;
 }
 
+.trip-header__avatar-btn {
+  display: flex;
+  align-items: center;
+  border-radius: $radius-pill;
+
+  @include focus-ring;
+
+  &:hover {
+    background: var(--color-surface);
+  }
+}
+
 .trip-header__change {
   color: var(--color-muted);
   border-radius: $radius-sm;
@@ -27,6 +39,10 @@
   &:hover {
     color: var(--color-ink);
     text-decoration: underline;
+  }
+
+  @include respond(tab-port) {
+    display: none;
   }
 }
 
@@ -330,10 +346,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: $space-sm;
   padding: $space-xs $space-sm;
   border: 1px solid var(--color-border);
   border-radius: $radius-md;
   background: var(--color-surface-raised);
+}
+
+.people-panel__identity {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+  min-width: 0;
 }
 
 .people-panel__you {
@@ -342,6 +366,68 @@
   color: var(--color-primary-hover);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.people-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: $space-3xs;
+  flex-shrink: 0;
+}
+
+.people-panel__edit,
+.people-panel__delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--color-muted);
+
+  @include focus-ring;
+}
+
+.people-panel__edit:hover {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.people-panel__delete:hover {
+  background: color-mix(in oklch, var(--color-danger) 12%, transparent);
+  color: var(--color-danger);
+}
+
+.rename-person-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  input {
+    min-height: 44px;
+    padding-inline: $space-sm;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    font-weight: 400;
+
+    @include focus-ring;
+  }
+}
+
+.rename-person-form__error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
 }
 
 .people-panel__form {
