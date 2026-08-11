@@ -30,6 +30,10 @@ export const selectPlaceEditError = (state) => state.places.editError;
 export const selectPlaceEditedToken = (state) => state.places.editedToken;
 
 export const selectMe = (state) => state.identity.me;
+export const selectDeviceProfiles = (state) => state.identity.deviceProfiles;
+export const selectDeviceProfilesLoading = (state) => state.identity.deviceProfilesLoading;
+export const selectConfirmedToken = (state) => state.identity.confirmedToken;
+export const selectSessionConfirmed = (state) => state.identity.confirmedToken > 0;
 
 export const selectAddressResults = (state) => state.geocode.results;
 export const selectAddressSearching = (state) => state.geocode.searching;

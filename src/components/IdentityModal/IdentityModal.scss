@@ -1,0 +1,104 @@
+@use "../../styles/config" as *;
+
+.identity-modal__picker p {
+  color: var(--color-muted);
+  margin-bottom: $space-sm;
+}
+
+.identity-modal__people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2xs;
+  margin-bottom: $space-sm;
+}
+
+.identity-modal__person {
+  display: flex;
+  align-items: center;
+  gap: $space-2xs;
+  border-radius: $radius-pill;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  padding: $space-3xs $space-sm $space-3xs $space-3xs;
+  min-height: 44px;
+
+  @include focus-ring;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.identity-modal__person--suggested {
+  border-color: var(--color-primary);
+  background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+}
+
+.identity-modal__suggested-hint {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-primary-hover);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.identity-modal__error {
+  color: var(--color-danger);
+  margin-top: $space-xs;
+}
+
+.identity-modal__form {
+  display: flex;
+  gap: $space-2xs;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: $space-sm;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-raised);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+
+    &::placeholder {
+      color: var(--color-muted-on-surface);
+    }
+
+    @include focus-ring;
+  }
+}
+
+.identity-modal__confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-lg;
+  text-align: center;
+  padding-block: $space-sm;
+}
+
+.identity-modal__confirm-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-xs;
+  width: 100%;
+}
+
+.identity-modal__confirm-no {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  min-height: 44px;
+  padding-inline: $space-sm;
+  border-radius: $radius-sm;
+
+  @include focus-ring;
+
+  &:hover {
+    color: var(--color-ink);
+    text-decoration: underline;
+  }
+}
