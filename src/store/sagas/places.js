@@ -32,6 +32,16 @@ function* addPlace(action) {
   }
 }
 
+function* editPlace(action) {
+  const { tripId, placeId, updates } = action.payload;
+  try {
+    yield call(api.editPlace, tripId, placeId, updates);
+    yield put(actions.editPlaceSuccess());
+  } catch (error) {
+    yield put(actions.editPlaceFailure(error.message));
+  }
+}
+
 function* deletePlace(action) {
   const { tripId, placeId } = action.payload;
   try {
@@ -56,6 +66,7 @@ function* votePlace(action) {
 export default function* placesSaga() {
   yield takeLatest(actionTypes.SUBSCRIBE, watchPlacesData);
   yield takeEvery(actionTypes.ADD_REQUEST, addPlace);
+  yield takeEvery(actionTypes.EDIT_REQUEST, editPlace);
   yield takeEvery(actionTypes.DELETE_REQUEST, deletePlace);
   yield takeEvery(actionTypes.VOTE_REQUEST, votePlace);
   // @generator saga:watch

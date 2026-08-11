@@ -17,6 +17,44 @@
   border: none;
 }
 
+// Stacks the price/votes label above the pin, bottom-anchored so the pin
+// tip stays glued to its geographic point whether or not a label renders.
+.map-pin-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.map-pin-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: $radius-pill;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  box-shadow: $shadow-sm;
+  color: var(--color-ink);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.map-pin-label__price {
+  color: var(--color-primary-hover);
+}
+
+.map-pin-label__votes {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  color: var(--color-accent);
+}
+
 .map-pin {
   position: relative;
   display: block;

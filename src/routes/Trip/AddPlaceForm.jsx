@@ -38,6 +38,7 @@ const AddPlaceForm = ({
 
   const [type, setType] = useState('stay');
   const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
   const [url, setUrl] = useState('');
   const [query, setQuery] = useState('');
   const source = detectPlaceSource(url);
@@ -47,6 +48,7 @@ const AddPlaceForm = ({
   useEffect(() => {
     if (savedToken !== tokenAtMount.current) {
       setTitle('');
+      setPrice('');
       setUrl('');
       setQuery('');
       setPendingLocation(null);
@@ -75,6 +77,7 @@ const AddPlaceForm = ({
         place: {
           type,
           title,
+          price: price.trim() ? Number(price) : null,
           url,
           source,
           address: pendingLocation.address,
@@ -119,6 +122,19 @@ const AddPlaceForm = ({
           placeholder={type === 'stay' ? t('addPlace.namePlaceholderStay') : t('addPlace.namePlaceholderPoi')}
           maxLength={80}
           required
+        />
+      </label>
+
+      <label>
+        {t('addPlace.priceLabel')}
+        <input
+          type="number"
+          inputMode="decimal"
+          min="0"
+          step="0.01"
+          value={price}
+          onChange={(event) => setPrice(event.target.value)}
+          placeholder="0"
         />
       </label>
 

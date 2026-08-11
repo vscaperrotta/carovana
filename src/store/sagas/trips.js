@@ -30,9 +30,9 @@ function* createTrip(action) {
 }
 
 function* renameTrip(action) {
-  const { tripId, name } = action.payload;
+  const { tripId, name, startDate, endDate } = action.payload;
   try {
-    yield call(api.renameTrip, tripId, name);
+    yield call(api.renameTrip, tripId, { name, startDate, endDate });
     yield put(actions.renameTripSuccess());
   } catch (error) {
     yield put(actions.renameTripFailure(error.message));

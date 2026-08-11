@@ -21,6 +21,9 @@ export const selectPeople = (state) => state.people.list;
 
 export const selectPlaces = (state) => state.places.list;
 export const selectPlacesSavedToken = (state) => state.places.savedToken;
+export const selectPlaceEditing = (state) => state.places.editing;
+export const selectPlaceEditError = (state) => state.places.editError;
+export const selectPlaceEditedToken = (state) => state.places.editedToken;
 
 export const selectMe = (state) => state.identity.me;
 

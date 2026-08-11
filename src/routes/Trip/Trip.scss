@@ -16,16 +16,18 @@
   border-radius: $radius-pill;
   padding: $space-3xs $space-sm $space-3xs $space-3xs;
   margin-left: auto;
-
-  @include focus-ring;
-
-  &:hover {
-    background: var(--color-surface);
-  }
 }
 
 .trip-header__change {
   color: var(--color-muted);
+  border-radius: $radius-sm;
+
+  @include focus-ring;
+
+  &:hover {
+    color: var(--color-ink);
+    text-decoration: underline;
+  }
 }
 
 .trip-notfound {
@@ -49,6 +51,10 @@
   flex: 1 1 auto;
   min-width: 0;
   height: 100%;
+  // Leaflet's internal panes/controls use z-index up to 1000; without this
+  // they escape into the root stacking context and paint over the header
+  // (z-index 20) whenever a dropdown extends past the header into the map.
+  isolation: isolate;
 }
 
 .trip-layout__panel {

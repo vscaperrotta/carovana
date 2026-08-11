@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
+import DateRangePicker from '@components/DatePicker';
 import {
   renameTripRequest,
   deleteTripRequest,
@@ -122,11 +123,16 @@ const RenameTripModal = ({ trip, open, onClose }) => {
   const error = useSelector(selectTripRenameError);
   const renamedToken = useSelector(selectTripRenamedToken);
   const [name, setName] = useState(trip.name);
+  const [startDate, setStartDate] = useState(trip.startDate || '');
+  const [endDate, setEndDate] = useState(trip.endDate || '');
   const seenToken = useRef(renamedToken);
 
   useEffect(() => {
-    if (open) setName(trip.name);
-  }, [open, trip.name]);
+    if (!open) return;
+    setName(trip.name);
+    setStartDate(trip.startDate || '');
+    setEndDate(trip.endDate || '');
+  }, [open, trip.name, trip.startDate, trip.endDate]);
 
   useEffect(() => {
     if (renamedToken === seenToken.current) return;
@@ -139,11 +145,14 @@ const RenameTripModal = ({ trip, open, onClose }) => {
     onClose();
   }
 
+  const unchanged =
+    name.trim() === trip.name && startDate === (trip.startDate || '') && endDate === (trip.endDate || '');
+
   function handleSubmit(event) {
     event.preventDefault();
     const trimmed = name.trim();
-    if (!trimmed || trimmed === trip.name || renaming) return;
-    dispatch(renameTripRequest({ tripId: trip.id, name: trimmed }));
+    if (!trimmed || unchanged || renaming) return;
+    dispatch(renameTripRequest({ tripId: trip.id, name: trimmed, startDate, endDate }));
   }
 
   return (
@@ -160,13 +169,18 @@ const RenameTripModal = ({ trip, open, onClose }) => {
           />
         </label>
 
+        <DateRangePicker
+          startLabel={t('home.dateFrom')}
+          endLabel={t('home.dateTo')}
+          start={startDate}
+          end={endDate}
+          onChangeStart={setStartDate}
+          onChangeEnd={setEndDate}
+        />
+
         {error && <p className="rename-trip-form__error">{error}</p>}
 
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={!name.trim() || name.trim() === trip.name || renaming}
-        >
+        <Button type="submit" variant="primary" disabled={!name.trim() || unchanged || renaming}>
           {renaming ? t('tripMenu.renaming') : t('tripMenu.renameSubmit')}
         </Button>
       </form>

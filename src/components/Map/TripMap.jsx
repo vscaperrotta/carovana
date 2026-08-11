@@ -14,14 +14,24 @@ import './TripMap.scss';
 const DEFAULT_CENTER = [43.5, 12.5];
 const DEFAULT_ZOOM = 5;
 
-function buildIcon(type, isTopVoted) {
-  const html = `<span class="map-pin map-pin--${type}${isTopVoted ? ' map-pin--top' : ''}"><span class="map-pin__glyph"></span></span>`;
+const HEART_SVG =
+  '<svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.5 4.04 3 5.5l7 7Z"/></svg>';
+
+function buildIcon(type, isTopVoted, price, voteCount) {
+  const hasLabel = price != null || voteCount > 0;
+  const label = hasLabel
+    ? `<span class="map-pin-label">${price != null ? `<span class="map-pin-label__price">€${price}</span>` : ''}${
+        voteCount > 0 ? `<span class="map-pin-label__votes">${HEART_SVG}${voteCount}</span>` : ''
+      }</span>`
+    : '';
+  const pin = `<span class="map-pin map-pin--${type}${isTopVoted ? ' map-pin--top' : ''}"><span class="map-pin__glyph"></span></span>`;
+  const html = `<span class="map-pin-stack">${label}${pin}</span>`;
   return L.divIcon({
     html,
     className: 'map-pin-wrapper',
-    iconSize: [30, 38],
-    iconAnchor: [15, 36],
-    popupAnchor: [0, -34],
+    iconSize: hasLabel ? [56, 58] : [30, 38],
+    iconAnchor: hasLabel ? [28, 56] : [15, 36],
+    popupAnchor: hasLabel ? [0, -54] : [0, -34],
   });
 }
 
@@ -91,7 +101,12 @@ const TripMap = ({ tripId, places, pickMode, onPick }) => {
         <Marker
           key={place.id}
           position={[place.lat, place.lng]}
-          icon={buildIcon(place.type, place.id === topVotedId)}
+          icon={buildIcon(
+            place.type,
+            place.id === topVotedId,
+            place.price,
+            Object.keys(place.votes || {}).length,
+          )}
         >
           <Popup minWidth={200}>
             <PlacePopup tripId={tripId} place={place} />

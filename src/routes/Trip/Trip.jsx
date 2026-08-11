@@ -118,7 +118,7 @@ const Trip = () => {
 
   return (
     <>
-      <AppHeader>
+      <AppHeader backTo="/">
         {trip && (
           <>
             <h1 className="font-display trip-header__name">{trip.name}</h1>
@@ -126,14 +126,16 @@ const Trip = () => {
           </>
         )}
         {me && (
-          <button
-            type="button"
-            className="trip-header__identity"
-            onClick={() => dispatch(clearIdentity(tripId))}
-          >
+          <span className="trip-header__identity">
             <PersonBadge person={me} size="sm" showName />
-            <span className="text-sm trip-header__change">{t('trip.change')}</span>
-          </button>
+            <button
+              type="button"
+              className="text-sm trip-header__change"
+              onClick={() => dispatch(clearIdentity(tripId))}
+            >
+              {t('trip.change')}
+            </button>
+          </span>
         )}
       </AppHeader>
 

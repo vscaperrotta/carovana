@@ -34,13 +34,14 @@ const strings = {
     en: 'The link might be wrong, or the trip was removed.',
   },
   'trip.change': { it: 'Cambia', en: 'Switch' },
+  'trip.backToList': { it: 'Torna ai viaggi', en: 'Back to trips' },
   'trip.places': { it: 'Luoghi', en: 'Places' },
   'trip.people': { it: 'Persone', en: 'People' },
 
   'tripMenu.aria': { it: 'Opzioni viaggio', en: 'Trip options' },
-  'tripMenu.rename': { it: 'Rinomina', en: 'Rename' },
+  'tripMenu.rename': { it: 'Modifica', en: 'Edit' },
   'tripMenu.delete': { it: 'Elimina', en: 'Delete' },
-  'tripMenu.renameTitle': { it: 'Rinomina viaggio', en: 'Rename trip' },
+  'tripMenu.renameTitle': { it: 'Modifica viaggio', en: 'Edit trip' },
   'tripMenu.renaming': { it: 'Salvo…', en: 'Saving…' },
   'tripMenu.renameSubmit': { it: 'Salva', en: 'Save' },
   'tripMenu.deleteTitle': { it: 'Elimina viaggio', en: 'Delete trip' },
@@ -70,6 +71,10 @@ const strings = {
     en: 'Remove "{{title}}" from the trip?',
   },
   'places.removeAria': { it: 'Rimuovi {{title}}', en: 'Remove {{title}}' },
+  'places.editAria': { it: 'Modifica {{title}}', en: 'Edit {{title}}' },
+  'places.editTitle': { it: 'Modifica luogo', en: 'Edit place' },
+  'places.editSubmit': { it: 'Salva', en: 'Save' },
+  'places.editSaving': { it: 'Salvo…', en: 'Saving…' },
 
   'people.empty': { it: 'Ancora nessuno in questo viaggio.', en: 'No one in this trip yet.' },
   'people.placeholder': { it: 'Aggiungi una persona al viaggio', en: 'Add a person to the trip' },
@@ -85,6 +90,7 @@ const strings = {
     en: 'E.g. Old-town apartment',
   },
   'addPlace.namePlaceholderPoi': { it: 'Es. Spiaggia della Pelosa', en: 'E.g. Pelosa Beach' },
+  'addPlace.priceLabel': { it: 'Prezzo (opzionale)', en: 'Price (optional)' },
   'addPlace.linkLabel': { it: 'Link (opzionale)', en: 'Link (optional)' },
   'addPlace.linkPlaceholder': { it: 'Airbnb, Booking, sito…', en: 'Airbnb, Booking, website…' },
   'addPlace.source.airbnb': { it: 'Link Airbnb riconosciuto', en: 'Airbnb link detected' },
@@ -145,6 +151,10 @@ const strings = {
   'errors.deletePlace': {
     it: 'Non riesco a rimuovere il luogo. Controlla la connessione e riprova.',
     en: "Can't remove the place. Check your connection and try again.",
+  },
+  'errors.editPlace': {
+    it: 'Non riesco a salvare le modifiche. Controlla la connessione e riprova.',
+    en: "Can't save the changes. Check your connection and try again.",
   },
   'errors.vote': {
     it: 'Non riesco a salvare il voto. Controlla la connessione e riprova.',
