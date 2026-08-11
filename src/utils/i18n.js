@@ -163,6 +163,10 @@ const strings = {
   },
   'identity.nameAria': { it: 'Il tuo nome', en: 'Your name' },
   'identity.claim': { it: 'Sono io', en: "That's me" },
+  'identity.confirmTitle': { it: 'Sei ancora tu?', en: 'Still you?' },
+  'identity.confirmYes': { it: 'Sì, sono io', en: "Yes, that's me" },
+  'identity.confirmNo': { it: 'No, cambia', en: 'No, switch' },
+  'identity.suggestedHint': { it: 'Suggerito', en: 'Suggested' },
 
   'vote.hint': { it: 'Scegli chi sei per votare', en: 'Pick who you are to vote' },
 

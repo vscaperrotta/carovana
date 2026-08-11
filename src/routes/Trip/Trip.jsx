@@ -11,13 +11,13 @@ import { GripVertical, MapPinned, Route, Users } from 'lucide-react';
 import AppHeader from '@components/Layout';
 import PersonBadge from '@components/PersonBadge';
 import TripMap from '@components/Map';
-import IdentityGate from '@components/IdentityGate';
+import IdentityModal from '@components/IdentityModal';
 import TripMenu from '@components/TripMenu';
 import { subscribeTrip } from '@store/actions/trip';
 import { subscribePeople } from '@store/actions/people';
 import { subscribePlaces } from '@store/actions/places';
 import { subscribeRoutes } from '@store/actions/routes';
-import { loadIdentity, clearIdentity } from '@store/actions/identity';
+import { loadIdentity, loadDeviceProfiles } from '@store/actions/identity';
 import { reverseGeocodeRequest } from '@store/actions/geocode';
 import {
   selectTrip,
@@ -52,6 +52,7 @@ const Trip = () => {
   const [pickMode, setPickMode] = useState(false);
   const [pendingLocation, setPendingLocation] = useState(null);
   const [panelWidth, setPanelWidth] = useState(null);
+  const [identityForceOpen, setIdentityForceOpen] = useState(false);
   const draggingRef = useRef(false);
 
   const startResize = useCallback((e) => {
@@ -88,6 +89,7 @@ const Trip = () => {
     dispatch(subscribePlaces(tripId));
     dispatch(subscribeRoutes(tripId));
     dispatch(loadIdentity(tripId));
+    dispatch(loadDeviceProfiles());
   }, [dispatch, tripId]);
 
   // Fill the pending pin's address once the reverse geocode resolves.
@@ -141,7 +143,7 @@ const Trip = () => {
             <button
               type="button"
               className="trip-header__avatar-btn"
-              onClick={() => dispatch(clearIdentity(tripId))}
+              onClick={() => setIdentityForceOpen(true)}
               aria-label={t('trip.change')}
             >
               <PersonBadge person={me} size="sm" showName />
@@ -149,7 +151,7 @@ const Trip = () => {
             <button
               type="button"
               className="text-sm trip-header__change"
-              onClick={() => dispatch(clearIdentity(tripId))}
+              onClick={() => setIdentityForceOpen(true)}
             >
               {t('trip.change')}
             </button>
@@ -187,7 +189,12 @@ const Trip = () => {
                 <GripVertical size={14} strokeWidth={2} aria-hidden="true" />
               </span>
             </div>
-            <IdentityGate people={people} tripId={tripId} />
+            <IdentityModal
+              people={people}
+              tripId={tripId}
+              forceOpen={identityForceOpen}
+              onForceOpenHandled={() => setIdentityForceOpen(false)}
+            />
 
             <div className="trip-tabs" role="tablist">
               <button
