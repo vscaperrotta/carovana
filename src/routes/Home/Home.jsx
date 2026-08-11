@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { MapPinned, Plus } from 'lucide-react';
+import { MapPinned, MessageSquareHeart, Plus } from 'lucide-react';
 import AppHeader from '@components/Layout';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
@@ -32,6 +32,7 @@ const Home = () => {
   const trips = useSelector(selectTrips);
   const loading = useSelector(selectTripsLoading);
   const [modalOpen, setModalOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useEffect(() => {
     dispatch(subscribeTrips());
@@ -61,6 +62,11 @@ const Home = () => {
           </Button>
         </div>
 
+        <button type="button" className="home__feedback-cta" onClick={() => setFeedbackOpen(true)}>
+          <MessageSquareHeart size={16} strokeWidth={2} aria-hidden="true" />
+          {t('home.feedbackCta')}
+        </button>
+
         {!loading && trips.length === 0 && (
           <div className="home__empty">
             <MapPinned size={32} strokeWidth={1.5} aria-hidden="true" />
@@ -78,8 +84,86 @@ const Home = () => {
       </main>
 
       <NewTripModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <FeedbackModal open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
     </>
   );
+};
+
+const FEEDBACK_ENDPOINT = 'https://formsubmit.co/ajax/nofantasystudio@gmail.com';
+
+const FeedbackModal = ({ open, onClose }) => {
+  const [message, setMessage] = useState('');
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
+  const [sent, setSent] = useState(false);
+
+  function handleClose() {
+    onClose();
+    // Reset after the close animation would run, not mid-modal.
+    setTimeout(() => {
+      setMessage('');
+      setError(null);
+      setSent(false);
+    }, 200);
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const trimmed = message.trim();
+    if (!trimmed || sending) return;
+    setSending(true);
+    setError(null);
+    try {
+      const response = await fetch(FEEDBACK_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Feedback Carovana',
+          message: trimmed,
+          page: window.location.href,
+        }),
+      });
+      if (!response.ok) throw new Error();
+      setSent(true);
+    } catch {
+      setError(t('home.feedbackError'));
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <Modal open={open} onClose={handleClose} title={t('home.feedbackTitle')}>
+      {sent ? (
+        <p className="feedback-form__success">{t('home.feedbackSuccess')}</p>
+      ) : (
+        <form className="feedback-form" onSubmit={handleSubmit}>
+          <label>
+            {t('home.feedbackLabel')}
+            <textarea
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder={t('home.feedbackPlaceholder')}
+              maxLength={2000}
+              rows={5}
+              autoFocus
+            />
+          </label>
+
+          {error && <p className="feedback-form__error">{error}</p>}
+
+          <Button type="submit" variant="primary" disabled={!message.trim() || sending}>
+            {sending ? t('home.feedbackSubmitting') : t('home.feedbackSubmit')}
+          </Button>
+        </form>
+      )}
+    </Modal>
+  );
+};
+
+FeedbackModal.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
 };
 
 const NewTripModal = ({ open, onClose }) => {

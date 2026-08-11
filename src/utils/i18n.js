@@ -27,6 +27,23 @@ const strings = {
   'home.dateTo': { it: 'Al', en: 'To' },
   'home.creating': { it: 'Creo il viaggio…', en: 'Creating trip…' },
   'home.create': { it: 'Crea viaggio', en: 'Create trip' },
+  'home.feedbackCta': { it: 'Hai un feedback?', en: 'Got feedback?' },
+  'home.feedbackTitle': { it: 'Lascia un feedback', en: 'Leave feedback' },
+  'home.feedbackLabel': { it: 'Cosa ci vuoi dire?', en: 'What do you want to tell us?' },
+  'home.feedbackPlaceholder': {
+    it: 'Idee, bug, cose che non ti tornano…',
+    en: 'Ideas, bugs, things that feel off…',
+  },
+  'home.feedbackSubmit': { it: 'Invia', en: 'Send' },
+  'home.feedbackSubmitting': { it: 'Invio…', en: 'Sending…' },
+  'home.feedbackSuccess': {
+    it: 'Grazie! Il tuo feedback è partito.',
+    en: 'Thanks! Your feedback is on its way.',
+  },
+  'home.feedbackError': {
+    it: 'Non riesco a inviare il feedback. Controlla la connessione e riprova.',
+    en: "Can't send the feedback. Check your connection and try again.",
+  },
 
   'trip.notFoundTitle': { it: 'Viaggio non trovato', en: 'Trip not found' },
   'trip.notFoundBody': {
