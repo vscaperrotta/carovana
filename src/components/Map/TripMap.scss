@@ -35,24 +35,23 @@
   gap: 0.3rem;
   padding: 0.15rem 0.4rem;
   border-radius: $radius-pill;
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
+  background: #000;
   box-shadow: $shadow-sm;
-  color: var(--color-ink);
+  color: #fff;
   font-size: 0.6875rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .map-pin-label__price {
-  color: var(--color-primary-hover);
+  color: #fff;
 }
 
 .map-pin-label__votes {
   display: inline-flex;
   align-items: center;
   gap: 0.15rem;
-  color: var(--color-accent);
+  color: #fff;
 }
 
 .map-pin {

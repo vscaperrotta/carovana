@@ -5,6 +5,7 @@ import people from '@store/sagas/people.js';
 import places from '@store/sagas/places.js';
 import identity from '@store/sagas/identity.js';
 import geocode from '@store/sagas/geocode.js';
+import routes from '@store/sagas/routes.js';
 // @generator sagas:import
 
 export default function* allSagas() {
@@ -15,6 +16,7 @@ export default function* allSagas() {
     places(),
     identity(),
     geocode(),
+    routes(),
     // @generator sagas:export
   ]);
 }

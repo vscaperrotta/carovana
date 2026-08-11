@@ -37,6 +37,7 @@ const strings = {
   'trip.backToList': { it: 'Torna ai viaggi', en: 'Back to trips' },
   'trip.places': { it: 'Luoghi', en: 'Places' },
   'trip.people': { it: 'Persone', en: 'People' },
+  'trip.routes': { it: 'Percorsi', en: 'Routes' },
 
   'tripMenu.aria': { it: 'Opzioni viaggio', en: 'Trip options' },
   'tripMenu.rename': { it: 'Modifica', en: 'Edit' },
@@ -107,6 +108,23 @@ const strings = {
     en: 'Pick who you are above to add a place.',
   },
 
+  'routes.fromLabel': { it: 'Da', en: 'From' },
+  'routes.toLabel': { it: 'A', en: 'To' },
+  'routes.submit': { it: 'Traccia percorso', en: 'Draw route' },
+  'routes.submitting': { it: 'Calcolo…', en: 'Calculating…' },
+  'routes.empty': {
+    it: 'Nessun percorso ancora. Collega due luoghi a piedi.',
+    en: 'No routes yet. Connect two places on foot.',
+  },
+  'routes.distance': { it: '{{km}} km', en: '{{km}} km' },
+  'routes.duration': { it: '{{min}} min', en: '{{min}} min' },
+  'routes.removeConfirm': { it: 'Rimuovere questo percorso?', en: 'Remove this route?' },
+  'routes.removeAria': { it: 'Rimuovi percorso', en: 'Remove route' },
+  'routes.quotaLow': {
+    it: 'Attenzione: solo {{remaining}} richieste ORS rimaste oggi.',
+    en: 'Heads up: only {{remaining}} ORS requests left today.',
+  },
+
   'identity.title': { it: 'Chi sei tu in questo viaggio?', en: 'Who are you on this trip?' },
   'identity.subtitle': {
     it: 'Scegli il tuo nome per aggiungere luoghi e votare. Serve solo su questo dispositivo.',
@@ -159,6 +177,14 @@ const strings = {
   'errors.vote': {
     it: 'Non riesco a salvare il voto. Controlla la connessione e riprova.',
     en: "Can't save the vote. Check your connection and try again.",
+  },
+  'errors.addRoute': {
+    it: 'Non riesco a calcolare il percorso. Controlla la connessione e riprova.',
+    en: "Can't calculate the route. Check your connection and try again.",
+  },
+  'errors.deleteRoute': {
+    it: 'Non riesco a rimuovere il percorso. Controlla la connessione e riprova.',
+    en: "Can't remove the route. Check your connection and try again.",
   },
 };
 
