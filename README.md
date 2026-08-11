@@ -17,6 +17,7 @@
 - Create a trip, share the link — no account needed.
 - Add accommodations and points of interest (from a link or a pin on the map), all plotted on one map.
 - Mark who's coming and vote to converge on the place to book.
+- Draw walking routes between two places, with distance and duration.
 - Everything in real time: open the map together and choose, without scrolling through 40 chat messages.
 
 ## Stack
@@ -25,7 +26,7 @@
 - **Redux Toolkit** + **redux-saga** + **immer** — state and side effects.
 - **react-router-dom** — routing.
 - **Firebase Firestore** — real-time data, no auth.
-- **react-leaflet** + OpenStreetMap — map; **Nominatim** — address search.
+- **react-leaflet** + OpenStreetMap — map; **Nominatim** — address search; **OpenRouteService** — walking directions.
 - **SCSS** per component, **lucide-react** for icons.
 
 ## Architecture
@@ -35,7 +36,7 @@
 
 ```
 src/
-├── api/          Firebase data layer, one module per resource (trips, people, places, geocode)
+├── api/          Firebase data layer, one module per resource (trips, people, places, routes, geocode, ors)
 ├── containers/   App.jsx — Redux Provider + Router
 ├── routes/       Home + Trip (routes.jsx defines the routes)
 ├── store/        Redux
@@ -104,6 +105,25 @@ anyone with a trip link can edit it. **Don't put sensitive data in a trip.**
 If Firestore isn't enabled yet: [console.firebase.google.com](https://console.firebase.google.com)
 → `carovana-d3152` → Firestore Database → Create database (production mode, then publish the rules above).
 
+## OpenRouteService
+
+Walking routes are computed via the [OpenRouteService](https://openrouteservice.org)
+`foot-walking` directions API. Free tier: 2000 requests/day, no credit card,
+just an email signup.
+
+```bash
+VITE_ORS_API_KEY=...
+```
+
+Get a key at [openrouteservice.org/dev/#/signup](https://openrouteservice.org/dev/#/signup)
+and add it to `.env` (and to your host's env vars for deploys, e.g. Vercel).
+Unlike the Firebase config, **this key is not meant to be public** — ORS has
+no per-project access rules like Firestore, so a leaked key just eats into
+your quota. It still ships in the client bundle (no backend in this app to
+hide it behind); the UI shows a low-quota warning using ORS's own rate-limit
+response headers, but consider restricting the key by HTTP referrer in the
+ORS dashboard for extra safety.
+
 ### Admin keys (private)
 
 The Admin SDK service-account key goes in `.admin/` and is **never committed**
@@ -118,6 +138,9 @@ trips/{tripId}                        { name, startDate, endDate, createdAt }
 trips/{tripId}/people/{personId}      { name, createdAt }
 trips/{tripId}/places/{placeId}       { type: 'stay' | 'poi', title, url, address, lat, lng,
                                          addedBy, addedByName, createdAt, votes: { [personId]: true } }
+trips/{tripId}/routes/{routeId}       { fromPlaceId, toPlaceId, profile: 'foot-walking',
+                                         geometry: [{ lat, lng }, ...], distanceMeters, durationSeconds,
+                                         addedBy, addedByName, createdAt }
 ```
 
 A vote is a toggle stored as a `votes` map directly on the place document
