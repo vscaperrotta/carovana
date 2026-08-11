@@ -99,9 +99,13 @@ rules, not by hiding it — it's in a `.env` file to keep the repo reusable
 across different Firebase projects (forks, separate deploys), not for
 secrecy.
 
-**Before going to production, publish the rules** from [`firestore.rules`](firestore.rules):
+**Before going to production, publish the rules.** `firestore.rules` is
+gitignored (deployed rules can differ per fork/Firebase project, same as
+`.env`) — copy the template from
+[`firestore.example.rules`](firestore.example.rules):
 
 ```bash
+cp firestore.example.rules firestore.rules
 npm install -g firebase-tools
 firebase login
 firebase deploy --only firestore:rules --project carovana-d3152
