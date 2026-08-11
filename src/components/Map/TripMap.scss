@@ -66,7 +66,7 @@
 }
 
 .map-pin--stay {
-  background: oklch(0.55 0.19 255); // hotel pins: blue, distinct from primary/accent
+  background: var(--color-primary);
 }
 
 .map-pin--poi {
@@ -74,10 +74,7 @@
 }
 
 .map-pin--top {
-  box-shadow:
-    0 0 0 3px var(--color-bg),
-    0 0 0 5px var(--color-accent),
-    $shadow-md;
+  box-shadow: $shadow-md;
 }
 
 .map-pin__glyph {
@@ -118,9 +115,20 @@
   color: var(--color-muted) !important;
 }
 
+.map-popup__title-row {
+  display: flex;
+  align-items: center;
+  gap: $space-2xs;
+  margin-bottom: 0.15rem;
+}
+
 .map-popup__title {
   font-weight: 600;
-  margin-bottom: 0.15rem;
+}
+
+.map-popup__price {
+  font-weight: 600;
+  color: var(--color-primary-hover);
 }
 
 .map-popup__address {

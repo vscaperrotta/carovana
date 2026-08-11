@@ -14,26 +14,6 @@
   box-shadow: 0 0 0 1px var(--color-accent);
 }
 
-.place-card__icon {
-  flex-shrink: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.place-card__icon--stay {
-  background: color-mix(in oklch, var(--color-primary) 18%, var(--color-surface));
-  color: var(--color-primary-hover);
-}
-
-.place-card__icon--poi {
-  background: color-mix(in oklch, var(--color-accent) 18%, var(--color-surface));
-  color: var(--color-accent);
-}
-
 .place-card__body {
   flex: 1;
   min-width: 0;

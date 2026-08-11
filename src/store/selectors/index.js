@@ -18,6 +18,10 @@ export const selectTripLoading = (state) => state.trip.loading;
 export const selectTripNotFound = (state) => state.trip.notFound;
 
 export const selectPeople = (state) => state.people.list;
+export const selectPersonRenaming = (state) => state.people.renaming;
+export const selectPersonRenameError = (state) => state.people.renameError;
+export const selectPersonRenamedToken = (state) => state.people.renamedToken;
+export const selectPersonDeleteError = (state) => state.people.deleteError;
 
 export const selectPlaces = (state) => state.places.list;
 export const selectPlacesSavedToken = (state) => state.places.savedToken;

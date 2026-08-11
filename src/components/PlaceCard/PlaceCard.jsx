@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ExternalLink, Home, MapPin, Pencil, Trash2, Trophy } from 'lucide-react';
+import { ExternalLink, Pencil, Trash2, Trophy } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
@@ -30,14 +30,6 @@ const PlaceCard = ({ tripId, place, isTopVoted }) => {
 
   return (
     <li className={`place-card${isTopVoted ? ' place-card--top' : ''}`}>
-      <span className={`place-card__icon place-card__icon--${place.type}`} aria-hidden="true">
-        {place.type === 'stay' ? (
-          <Home size={16} strokeWidth={2} />
-        ) : (
-          <MapPin size={16} strokeWidth={2} />
-        )}
-      </span>
-
       <div className="place-card__body">
         <div className="place-card__title-row">
           <span className="place-card__title">{place.title}</span>

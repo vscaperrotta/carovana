@@ -138,7 +138,14 @@ const Trip = () => {
         )}
         {me && (
           <span className="trip-header__identity">
-            <PersonBadge person={me} size="sm" showName />
+            <button
+              type="button"
+              className="trip-header__avatar-btn"
+              onClick={() => dispatch(clearIdentity(tripId))}
+              aria-label={t('trip.change')}
+            >
+              <PersonBadge person={me} size="sm" showName />
+            </button>
             <button
               type="button"
               className="text-sm trip-header__change"
