@@ -1,10 +1,10 @@
 @use "../../styles/config" as *;
 
 .home {
-  padding-block: $space-xl $space-3xl;
+  padding-block: $space-xl;
 
   @include respond(phone) {
-    padding-block: $space-lg $space-2xl;
+    padding-block: $space-lg;
   }
 }
 

@@ -128,7 +128,7 @@ const Trip = () => {
   }
 
   return (
-    <>
+    <div className="trip-page">
       <AppHeader backTo="/">
         {trip && (
           <>
@@ -244,7 +244,7 @@ const Trip = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

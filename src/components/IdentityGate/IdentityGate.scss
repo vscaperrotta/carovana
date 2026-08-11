@@ -15,24 +15,12 @@
   }
 }
 
-.identity-gate__icon {
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .identity-gate__body {
   flex: 1;
   min-width: 0;
 
   h2 {
-    margin-bottom: $space-3xs;
+    margin: 0;
   }
 
   p {

@@ -58,9 +58,19 @@
 
 // --- Split layout: map + side panel, desktop-first (base = split view) ---
 
+// Flex column so the map/panel split fills exactly what's left below the
+// header, whatever its real rendered height is — no magic-number calc()
+// to keep in sync with AppHeader's own padding/border.
+.trip-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
 .trip-layout {
   display: flex;
-  height: calc(100dvh - #{$header-height});
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .trip-layout__map {
@@ -125,7 +135,12 @@
 }
 
 @include respond(tab-land) {
+  .trip-page {
+    height: auto;
+  }
+
   .trip-layout {
+    flex: none;
     flex-direction: column;
     height: auto;
   }

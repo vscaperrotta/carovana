@@ -2,6 +2,10 @@ import { produce } from 'immer';
 import { actionTypes } from '@store/actions/routes';
 
 const ACTION_HANDLERS = {
+  [actionTypes.SUBSCRIBE]: produce((draft) => {
+    draft.list = [];
+    draft.loading = true;
+  }),
   [actionTypes.RECEIVED]: produce((draft, action) => {
     draft.list = action.payload;
     draft.loading = false;
