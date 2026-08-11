@@ -131,6 +131,12 @@
   }
 }
 
+.edit-place-form__location {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
 .edit-place-form__error {
   font-size: var(--text-sm);
   color: var(--color-danger);

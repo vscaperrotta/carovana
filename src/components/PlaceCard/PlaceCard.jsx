@@ -6,14 +6,21 @@
 
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ExternalLink, Pencil, Trash2, Trophy } from 'lucide-react';
+import { ExternalLink, MapPin, Pencil, Search, Trash2, Trophy } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
 import PersonBadge from '@components/PersonBadge';
 import VoteButton from '@components/PlaceCard/VoteButton';
 import { deletePlaceRequest, editPlaceRequest, clearPlacesError } from '@store/actions/places';
-import { selectPlaceEditing, selectPlaceEditError, selectPlaceEditedToken } from '@store/selectors';
+import { searchAddressRequest, clearAddressSearch } from '@store/actions/geocode';
+import {
+  selectPlaceEditing,
+  selectPlaceEditError,
+  selectPlaceEditedToken,
+  selectAddressResults,
+  selectAddressSearching,
+} from '@store/selectors';
 import { detectPlaceSource, extractUrl } from '@utils/placeLink';
 import { locale, t } from '@utils/i18n';
 import './PlaceCard.scss';
@@ -85,9 +92,15 @@ const EditPlaceModal = ({ tripId, place, open, onClose }) => {
   const editing = useSelector(selectPlaceEditing);
   const error = useSelector(selectPlaceEditError);
   const editedToken = useSelector(selectPlaceEditedToken);
+  const addressResults = useSelector(selectAddressResults);
+  const addressSearching = useSelector(selectAddressSearching);
   const [title, setTitle] = useState(place.title);
   const [price, setPrice] = useState(place.price ?? '');
   const [url, setUrl] = useState(place.url || '');
+  const [query, setQuery] = useState('');
+  // Local to this modal — no map-click picking here (a native <dialog> makes
+  // the rest of the page, including the map, inert while open), just search.
+  const [location, setLocation] = useState({ address: place.address, lat: place.lat, lng: place.lng });
   const seenToken = useRef(editedToken);
 
   useEffect(() => {
@@ -95,7 +108,13 @@ const EditPlaceModal = ({ tripId, place, open, onClose }) => {
     setTitle(place.title);
     setPrice(place.price ?? '');
     setUrl(place.url || '');
-  }, [open, place.title, place.price, place.url]);
+    setLocation({ address: place.address, lat: place.lat, lng: place.lng });
+    setQuery('');
+  }, [open, place.title, place.price, place.url, place.address, place.lat, place.lng]);
+
+  useEffect(() => {
+    dispatch(searchAddressRequest(query));
+  }, [dispatch, query]);
 
   useEffect(() => {
     if (editedToken === seenToken.current) return;
@@ -105,7 +124,14 @@ const EditPlaceModal = ({ tripId, place, open, onClose }) => {
 
   function handleClose() {
     dispatch(clearPlacesError());
+    dispatch(clearAddressSearch());
     onClose();
+  }
+
+  function pickResult(result) {
+    setLocation({ lat: result.lat, lng: result.lng, address: result.label });
+    setQuery('');
+    dispatch(clearAddressSearch());
   }
 
   function handleSubmit(event) {
@@ -121,6 +147,9 @@ const EditPlaceModal = ({ tripId, place, open, onClose }) => {
           price: price === '' ? null : Number(price),
           url,
           source: detectPlaceSource(url),
+          address: location.address,
+          lat: location.lat,
+          lng: location.lng,
         },
       }),
     );
@@ -168,6 +197,42 @@ const EditPlaceModal = ({ tripId, place, open, onClose }) => {
             placeholder={t('addPlace.linkPlaceholder')}
           />
         </label>
+
+        <div className="edit-place-form__location">
+          <label>
+            {t('addPlace.whereLabel')}
+            <div className="add-place-form__search">
+              <Search size={16} strokeWidth={2} aria-hidden="true" />
+              <input
+                type="text"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={t('addPlace.searchPlaceholder')}
+              />
+            </div>
+          </label>
+
+          {addressSearching && <p className="text-sm">{t('addPlace.searching')}</p>}
+
+          {addressResults.length > 0 && (
+            <ul className="add-place-form__results">
+              {addressResults.map((result, index) => (
+                <li key={index}>
+                  <button type="button" onClick={() => pickResult(result)}>
+                    {result.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {location.lat != null && (
+            <p className="add-place-form__picked text-sm">
+              <MapPin size={14} strokeWidth={2} aria-hidden="true" />
+              {location.address || `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`}
+            </p>
+          )}
+        </div>
 
         {error && <p className="edit-place-form__error">{error}</p>}
 

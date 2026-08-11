@@ -45,13 +45,16 @@ export function addPlace(tripId, place) {
   );
 }
 
-export function editPlace(tripId, placeId, { title, price, url, source }) {
+export function editPlace(tripId, placeId, { title, price, url, source, address, lat, lng }) {
   return withTimeout(
     updateDoc(doc(db, 'trips', tripId, 'places', placeId), {
       title: title.trim(),
       price: price ?? null,
       url: url?.trim() || null,
       source: source || null,
+      address: address || null,
+      lat,
+      lng,
     }),
     12000,
     t('errors.editPlace'),
