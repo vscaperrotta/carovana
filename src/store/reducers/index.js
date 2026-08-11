@@ -4,6 +4,7 @@ import people from '@store/reducers/people.js';
 import places from '@store/reducers/places.js';
 import identity from '@store/reducers/identity.js';
 import geocode from '@store/reducers/geocode.js';
+import routes from '@store/reducers/routes.js';
 // @generator reducer:import
 
 const allReducer = {
@@ -13,6 +14,7 @@ const allReducer = {
   places,
   identity,
   geocode,
+  routes,
   // @generator reducer:export
 };
 

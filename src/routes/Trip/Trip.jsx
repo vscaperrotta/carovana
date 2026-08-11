@@ -7,7 +7,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { GripVertical, MapPinned, Users } from 'lucide-react';
+import { GripVertical, MapPinned, Route, Users } from 'lucide-react';
 import AppHeader from '@components/Layout';
 import PersonBadge from '@components/PersonBadge';
 import TripMap from '@components/Map';
@@ -16,6 +16,7 @@ import TripMenu from '@components/TripMenu';
 import { subscribeTrip } from '@store/actions/trip';
 import { subscribePeople } from '@store/actions/people';
 import { subscribePlaces } from '@store/actions/places';
+import { subscribeRoutes } from '@store/actions/routes';
 import { loadIdentity, clearIdentity } from '@store/actions/identity';
 import { reverseGeocodeRequest } from '@store/actions/geocode';
 import {
@@ -24,12 +25,14 @@ import {
   selectTripNotFound,
   selectPeople,
   selectPlaces,
+  selectRoutes,
   selectMe,
   selectReverseGeocode,
 } from '@store/selectors';
 import { t } from '@utils/i18n';
 import PlacesPanel from './PlacesPanel';
 import PeoplePanel from './PeoplePanel';
+import RoutesPanel from './RoutesPanel';
 import './Trip.scss';
 
 const Trip = () => {
@@ -41,6 +44,7 @@ const Trip = () => {
   const notFound = useSelector(selectTripNotFound);
   const people = useSelector(selectPeople);
   const places = useSelector(selectPlaces);
+  const routes = useSelector(selectRoutes);
   const me = useSelector(selectMe);
   const reverse = useSelector(selectReverseGeocode);
 
@@ -82,6 +86,7 @@ const Trip = () => {
     dispatch(subscribeTrip(tripId));
     dispatch(subscribePeople(tripId));
     dispatch(subscribePlaces(tripId));
+    dispatch(subscribeRoutes(tripId));
     dispatch(loadIdentity(tripId));
   }, [dispatch, tripId]);
 
@@ -94,6 +99,12 @@ const Trip = () => {
         : prev,
     );
   }, [reverse]);
+
+  const visibleRoutes = routes.filter(
+    (route) =>
+      places.some((place) => place.id === route.fromPlaceId) &&
+      places.some((place) => place.id === route.toPlaceId),
+  );
 
   const handlePick = useCallback(
     (lat, lng) => {
@@ -142,7 +153,13 @@ const Trip = () => {
       {!loading && trip && (
         <div className="trip-layout">
           <div className="trip-layout__map">
-            <TripMap tripId={tripId} places={places} pickMode={pickMode} onPick={handlePick} />
+            <TripMap
+              tripId={tripId}
+              places={places}
+              routes={visibleRoutes}
+              pickMode={pickMode}
+              onPick={handlePick}
+            />
           </div>
 
           <div
@@ -188,10 +205,21 @@ const Trip = () => {
                 {t('trip.people')}
                 <span className="trip-tabs__count">{people.length}</span>
               </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={tab === 'routes'}
+                className={`trip-tabs__tab${tab === 'routes' ? ' is-active' : ''}`}
+                onClick={() => setTab('routes')}
+              >
+                <Route size={16} strokeWidth={2} aria-hidden="true" />
+                {t('trip.routes')}
+                <span className="trip-tabs__count">{visibleRoutes.length}</span>
+              </button>
             </div>
 
             <div className="trip-layout__panel-body">
-              {tab === 'places' ? (
+              {tab === 'places' && (
                 <PlacesPanel
                   tripId={tripId}
                   places={places}
@@ -200,8 +228,10 @@ const Trip = () => {
                   pendingLocation={pendingLocation}
                   setPendingLocation={setPendingLocation}
                 />
-              ) : (
-                <PeoplePanel tripId={tripId} people={people} />
+              )}
+              {tab === 'people' && <PeoplePanel tripId={tripId} people={people} />}
+              {tab === 'routes' && (
+                <RoutesPanel tripId={tripId} places={places} routes={visibleRoutes} />
               )}
             </div>
           </div>

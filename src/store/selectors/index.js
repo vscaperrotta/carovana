@@ -31,4 +31,10 @@ export const selectAddressResults = (state) => state.geocode.results;
 export const selectAddressSearching = (state) => state.geocode.searching;
 export const selectReverseGeocode = (state) => state.geocode.reverse;
 
+export const selectRoutes = (state) => state.routes.list;
+export const selectRoutesAdding = (state) => state.routes.adding;
+export const selectRoutesError = (state) => state.routes.error;
+export const selectRoutesSavedToken = (state) => state.routes.savedToken;
+export const selectOrsQuota = (state) => state.routes.orsQuota;
+
 // @generator selector:method
