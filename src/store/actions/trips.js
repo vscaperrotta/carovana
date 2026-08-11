@@ -29,7 +29,7 @@ export const createTripRequest = (payload) => createAction(actionTypes.CREATE_RE
 export const createTripSuccess = (id) => createAction(actionTypes.CREATE_SUCCESS, id);
 export const createTripFailure = (error) => createAction(actionTypes.CREATE_FAILURE, error);
 export const clearCreatedTrip = () => createAction(actionTypes.CLEAR_CREATED);
-// payload: { tripId, name }
+// payload: { tripId, name, startDate, endDate }
 export const renameTripRequest = (payload) => createAction(actionTypes.RENAME_REQUEST, payload);
 export const renameTripSuccess = () => createAction(actionTypes.RENAME_SUCCESS);
 export const renameTripFailure = (error) => createAction(actionTypes.RENAME_FAILURE, error);

@@ -46,12 +46,12 @@ const DateRangePicker = ({ startLabel, endLabel, start, end, onChangeStart, onCh
     };
   }, [phase]);
 
-  function openPhase(nextPhase) {
+  function openPhase(nextPhase, forcedViewDate) {
     const anchor = nextPhase === 'start' ? startTriggerRef.current : endTriggerRef.current;
     const rect = anchor.getBoundingClientRect();
     setPanelPos({ top: rect.bottom + 6, left: rect.left });
     setViewDate(
-      (nextPhase === 'start' ? startDate : endDate) || startDate || new Date(),
+      forcedViewDate || (nextPhase === 'start' ? startDate : endDate) || startDate || new Date(),
     );
     setPhase(nextPhase);
   }
@@ -61,7 +61,7 @@ const DateRangePicker = ({ startLabel, endLabel, start, end, onChangeStart, onCh
     if (phase === 'start') {
       onChangeStart(iso);
       if (end && day > stripTime(endDate)) onChangeEnd('');
-      openPhase('end');
+      openPhase('end', day);
       return;
     }
     onChangeEnd(iso);

@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  getCountFromServer,
   onSnapshot,
   orderBy,
   query,
@@ -18,6 +19,11 @@ export function watchPeople(tripId, onData) {
   return onSnapshot(q, (snap) => {
     onData(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   });
+}
+
+export async function countPeople(tripId) {
+  const snap = await getCountFromServer(collection(db, 'trips', tripId, 'people'));
+  return snap.data().count;
 }
 
 export function addPerson(tripId, name) {

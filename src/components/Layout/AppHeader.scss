@@ -26,9 +26,38 @@
   @include focus-ring;
 }
 
+.app-header__back {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: var(--color-ink);
+
+  @include focus-ring;
+
+  &:hover {
+    background: var(--color-surface);
+  }
+}
+
 .app-header__slot {
   display: flex;
   align-items: center;
   gap: $space-sm;
   min-width: 0;
+}
+
+@include respond(tab-port) {
+  .app-header--has-back {
+    .app-header__wordmark {
+      display: none;
+    }
+
+    .app-header__back {
+      display: flex;
+    }
+  }
 }

@@ -37,6 +37,14 @@ const Home = () => {
     dispatch(subscribeTrips());
   }, [dispatch]);
 
+  // Nearest-first: dated trips ordered chronologically, undated trips pushed to the end.
+  const sortedTrips = [...trips].sort((a, b) => {
+    if (!a.startDate && !b.startDate) return 0;
+    if (!a.startDate) return 1;
+    if (!b.startDate) return -1;
+    return a.startDate.localeCompare(b.startDate);
+  });
+
   return (
     <>
       <AppHeader />
@@ -61,7 +69,7 @@ const Home = () => {
         )}
 
         <ul className="home__list">
-          {trips.map((trip) => (
+          {sortedTrips.map((trip) => (
             <li key={trip.id}>
               <TripCard trip={trip} />
             </li>

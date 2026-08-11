@@ -18,8 +18,21 @@ const ACTION_HANDLERS = {
     draft.adding = false;
     draft.error = action.payload;
   }),
+  [actionTypes.EDIT_REQUEST]: produce((draft) => {
+    draft.editing = true;
+    draft.editError = null;
+  }),
+  [actionTypes.EDIT_SUCCESS]: produce((draft) => {
+    draft.editing = false;
+    draft.editedToken += 1;
+  }),
+  [actionTypes.EDIT_FAILURE]: produce((draft, action) => {
+    draft.editing = false;
+    draft.editError = action.payload;
+  }),
   [actionTypes.CLEAR_ERROR]: produce((draft) => {
     draft.error = null;
+    draft.editError = null;
   }),
   // @generator reducer:type:action
 };
@@ -32,6 +45,9 @@ const initialState = {
   // without awaiting the dispatch.
   savedToken: 0,
   error: null,
+  editing: false,
+  editError: null,
+  editedToken: 0,
 };
 
 const places = (state = initialState, action) => {

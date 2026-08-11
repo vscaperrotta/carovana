@@ -50,6 +50,11 @@
   font-weight: 600;
 }
 
+.place-card__price {
+  font-weight: 600;
+  color: var(--color-primary-hover);
+}
+
 .place-card__badge {
   display: inline-flex;
   align-items: center;
@@ -96,6 +101,7 @@
   flex-shrink: 0;
 }
 
+.place-card__edit,
 .place-card__delete {
   display: flex;
   align-items: center;
@@ -106,9 +112,46 @@
   color: var(--color-muted);
 
   @include focus-ring;
+}
 
-  &:hover {
-    background: color-mix(in oklch, var(--color-danger) 12%, transparent);
-    color: var(--color-danger);
+.place-card__edit:hover {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.place-card__delete:hover {
+  background: color-mix(in oklch, var(--color-danger) 12%, transparent);
+  color: var(--color-danger);
+}
+
+.edit-place-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3xs;
+    font-size: var(--text-sm);
+    font-weight: 600;
   }
+
+  input {
+    min-height: 44px;
+    padding-inline: $space-sm;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    font-weight: 400;
+
+    @include focus-ring;
+  }
+}
+
+.edit-place-form__error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
 }

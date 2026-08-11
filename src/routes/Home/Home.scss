@@ -37,13 +37,46 @@
 }
 
 .home__list {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: $space-2xs;
+  gap: $space-md;
+  padding-left: $space-lg;
+
+  // Vertical timeline rail spanning the trip list. Its center (left + half
+  // width) must match the dot's translate(-50%) anchor point below.
+  &::before {
+    content: "";
+    position: absolute;
+    top: $space-md;
+    bottom: $space-md;
+    left: 6px;
+    width: 3px;
+    background: var(--color-border);
+  }
+
+  > li {
+    position: relative;
+
+    // Dot marking this trip's spot on the rail, centered on the card.
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: calc(-#{$space-lg} + 7.5px);
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background: var(--color-primary);
+      border: 2px solid var(--color-bg);
+      transform: translate(-50%, -50%);
+    }
+  }
 }
 
 .trip-card {
   position: relative;
+  z-index: 0;
   display: flex;
   align-items: center;
   padding: $space-sm $space-md;
@@ -60,6 +93,12 @@
     border-color: var(--color-primary);
     box-shadow: var(--shadow-sm);
     transform: translateY(-1px);
+  }
+
+  // An open dropdown needs to paint above later sibling cards, not just
+  // above its own hover-triggered transform stacking context.
+  &:has(.trip-menu__dropdown) {
+    z-index: 1;
   }
 }
 
@@ -110,8 +149,17 @@
   white-space: nowrap;
 }
 
-.trip-card__date {
+.trip-card__meta {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
   color: var(--color-muted);
+}
+
+.trip-card__people {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3xs;
 }
 
 .trip-card__chevron {

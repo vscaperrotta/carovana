@@ -37,9 +37,13 @@ export function createTrip({ name, startDate, endDate }) {
   );
 }
 
-export function renameTrip(tripId, name) {
+export function renameTrip(tripId, { name, startDate, endDate }) {
   return withTimeout(
-    updateDoc(doc(db, 'trips', tripId), { name: name.trim() }),
+    updateDoc(doc(db, 'trips', tripId), {
+      name: name.trim(),
+      startDate: startDate || null,
+      endDate: endDate || null,
+    }),
     12000,
     t('errors.renameTrip'),
   );

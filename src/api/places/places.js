@@ -29,6 +29,7 @@ export function addPlace(tripId, place) {
     addDoc(collection(db, 'trips', tripId, 'places'), {
       type: place.type, // 'stay' | 'poi'
       title: place.title.trim(),
+      price: place.price ?? null,
       url: place.url?.trim() || null,
       source: place.source || null,
       address: place.address || null,
@@ -41,6 +42,19 @@ export function addPlace(tripId, place) {
     }),
     12000,
     t('errors.addPlace'),
+  );
+}
+
+export function editPlace(tripId, placeId, { title, price, url, source }) {
+  return withTimeout(
+    updateDoc(doc(db, 'trips', tripId, 'places', placeId), {
+      title: title.trim(),
+      price: price ?? null,
+      url: url?.trim() || null,
+      source: source || null,
+    }),
+    12000,
+    t('errors.editPlace'),
   );
 }
 

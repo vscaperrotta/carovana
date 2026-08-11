@@ -12,6 +12,9 @@ export const actionTypes = {
   ADD_REQUEST: '@@places/add_request',
   ADD_SUCCESS: '@@places/add_success',
   ADD_FAILURE: '@@places/add_failure',
+  EDIT_REQUEST: '@@places/edit_request',
+  EDIT_SUCCESS: '@@places/edit_success',
+  EDIT_FAILURE: '@@places/edit_failure',
   DELETE_REQUEST: '@@places/delete_request',
   VOTE_REQUEST: '@@places/vote_request',
   CLEAR_ERROR: '@@places/clear_error',
@@ -24,6 +27,10 @@ export const placesReceived = (list) => createAction(actionTypes.RECEIVED, list)
 export const addPlaceRequest = (payload) => createAction(actionTypes.ADD_REQUEST, payload);
 export const addPlaceSuccess = () => createAction(actionTypes.ADD_SUCCESS);
 export const addPlaceFailure = (error) => createAction(actionTypes.ADD_FAILURE, error);
+// payload: { tripId, placeId, updates }
+export const editPlaceRequest = (payload) => createAction(actionTypes.EDIT_REQUEST, payload);
+export const editPlaceSuccess = () => createAction(actionTypes.EDIT_SUCCESS);
+export const editPlaceFailure = (error) => createAction(actionTypes.EDIT_FAILURE, error);
 // payload: { tripId, placeId }
 export const deletePlaceRequest = (payload) => createAction(actionTypes.DELETE_REQUEST, payload);
 // payload: { tripId, placeId, personId, hasVoted }
