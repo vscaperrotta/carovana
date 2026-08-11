@@ -6,7 +6,6 @@
 
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { UserRound } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import PersonBadge from '@components/PersonBadge';
 import Button from '@components/Button';
@@ -40,9 +39,6 @@ const IdentityGate = ({ people, tripId }) => {
 
   return (
     <section className="identity-gate" aria-label={t('identity.ariaLabel')}>
-      <div className="identity-gate__icon">
-        <UserRound size={20} strokeWidth={2} aria-hidden="true" />
-      </div>
       <div className="identity-gate__body">
         <h2>{t('identity.title')}</h2>
         <p className="text-sm">{t('identity.subtitle')}</p>

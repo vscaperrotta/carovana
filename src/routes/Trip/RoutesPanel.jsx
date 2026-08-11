@@ -12,14 +12,7 @@ import Button from '@components/Button';
 import { addRouteRequest, deleteRouteRequest } from '@store/actions/routes';
 import { selectMe, selectRoutesAdding, selectRoutesError, selectRoutesSavedToken, selectOrsQuota } from '@store/selectors';
 import { t } from '@utils/i18n';
-
-function formatDistance(meters) {
-  return t('routes.distance', { km: (meters / 1000).toFixed(1) });
-}
-
-function formatDuration(seconds) {
-  return t('routes.duration', { min: Math.round(seconds / 60) });
-}
+import { formatDistance, formatDuration } from '@utils/route';
 
 const RoutesPanel = ({ tripId, places, routes }) => {
   const dispatch = useDispatch();

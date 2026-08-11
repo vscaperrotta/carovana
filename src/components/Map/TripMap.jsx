@@ -4,11 +4,12 @@
  *
  */
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, Marker, Polyline, Popup, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import PlacePopup from './PlacePopup';
+import { formatDistance, formatDuration } from '@utils/route';
 import './TripMap.scss';
 
 const DEFAULT_CENTER = [43.5, 12.5];
@@ -67,6 +68,35 @@ ClickHandler.propTypes = {
   onPick: PropTypes.func.isRequired,
 };
 
+const RouteLine = ({ route }) => {
+  const [hovered, setHovered] = useState(false);
+  const info = `${formatDistance(route.distanceMeters)} · ${formatDuration(route.durationSeconds)}`;
+
+  return (
+    <Polyline
+      positions={route.geometry}
+      pathOptions={{
+        color: '#38bdf8',
+        weight: hovered ? 6 : 4,
+        opacity: hovered ? 1 : 0.85,
+      }}
+      eventHandlers={{
+        mouseover: () => setHovered(true),
+        mouseout: () => setHovered(false),
+      }}
+    >
+      <Tooltip sticky className="route-tooltip">
+        {info}
+      </Tooltip>
+      <Popup>{info}</Popup>
+    </Polyline>
+  );
+};
+
+RouteLine.propTypes = {
+  route: PropTypes.object.isRequired,
+};
+
 const TripMap = ({ tripId, places, routes, pickMode, onPick }) => {
   const topVotedId = useMemo(() => {
     let best = null;
@@ -95,11 +125,7 @@ const TripMap = ({ tripId, places, routes, pickMode, onPick }) => {
       <FitBounds places={places} />
       <ClickHandler active={pickMode} onPick={onPick} />
       {routes.map((route) => (
-        <Polyline
-          key={route.id}
-          positions={route.geometry}
-          pathOptions={{ color: '#38bdf8', weight: 4, opacity: 0.85 }}
-        />
+        <RouteLine key={route.id} route={route} />
       ))}
       {places.map((place) => (
         <Marker
