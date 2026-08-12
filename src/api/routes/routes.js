@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '@api/index.js';
 import { withTimeout } from '@utils/async.js';
 import { t } from '@utils/i18n.js';
@@ -12,7 +12,7 @@ export function watchRoutes(tripId, onData) {
 
 export function addRoute(tripId, route) {
   return withTimeout(
-    addDoc(collection(db, 'trips', tripId, 'routes'), {
+    setDoc(doc(db, 'trips', tripId, 'routes', `${route.fromPlaceId}_${route.toPlaceId}`), {
       fromPlaceId: route.fromPlaceId,
       toPlaceId: route.toPlaceId,
       profile: 'foot-walking',

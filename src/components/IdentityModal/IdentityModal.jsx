@@ -11,7 +11,13 @@ import Modal from '@components/Modal';
 import Button from '@components/Button';
 import PersonBadge from '@components/PersonBadge';
 import { confirmIdentity } from '@store/actions/identity';
-import { selectMe, selectDeviceProfiles, selectSessionConfirmed, selectConfirmedToken } from '@store/selectors';
+import {
+  selectMe,
+  selectDeviceProfiles,
+  selectDeviceProfilesLoading,
+  selectConfirmedToken,
+  selectPeopleLoading,
+} from '@store/selectors';
 import { t } from '@utils/i18n';
 import './IdentityModal.scss';
 
@@ -19,55 +25,59 @@ const IdentityModal = ({ people, tripId, forceOpen, onForceOpenHandled }) => {
   const dispatch = useDispatch();
   const me = useSelector(selectMe);
   const deviceProfiles = useSelector(selectDeviceProfiles);
-  const sessionConfirmed = useSelector(selectSessionConfirmed);
+  const deviceProfilesLoading = useSelector(selectDeviceProfilesLoading);
   const confirmedToken = useSelector(selectConfirmedToken);
+  const peopleLoading = useSelector(selectPeopleLoading);
   const adding = useSelector((state) => state.people.adding);
   const error = useSelector((state) => state.people.error);
 
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState('picker'); // 'picker' | 'confirm'
   const [name, setName] = useState('');
   const seenTokenRef = useRef(confirmedToken);
+  const autoClaimedRef = useRef(false);
 
   const meIsValid = Boolean(me && people.some((person) => person.id === me.id));
+  const suggestedName = deviceProfiles[0]?.name;
+  const matchedPerson = suggestedName
+    ? people.find((person) => person.name.trim().toLowerCase() === suggestedName.toLowerCase())
+    : null;
 
-  // Two independent reasons to show up: no valid identity yet for this trip
-  // (picker), or a valid one exists but this browser session hasn't
-  // reconfirmed it yet (confirm). An explicit "Cambia" click always wins.
-  // This only ever *opens* the modal — closing is handled separately below,
-  // so a "Cambia" click on an already-valid/confirmed identity doesn't get
-  // immediately undone by this same effect re-deriving "nothing to show".
+  // Nothing to do on our own once a valid identity exists. Otherwise: if
+  // this device has been here before (a device profile name matches someone
+  // already in the trip), silently claim that person instead of asking —
+  // that's the whole point of remembering the name. Only fall back to the
+  // picker when there's truly nothing to go on. `people`/`deviceProfiles`
+  // load async, so we wait for both before deciding "no match" — otherwise
+  // every reload would flash the picker open, then auto-claim/close it.
+  // An explicit "Cambia" click always wins over all of this.
   useEffect(() => {
     if (forceOpen) {
-      setMode('picker');
       setOpen(true);
       onForceOpenHandled();
-    } else if (!meIsValid) {
-      setMode('picker');
-      setOpen(true);
-    } else if (!sessionConfirmed) {
-      setMode('confirm');
-      setOpen(true);
+      return;
     }
+    if (meIsValid || peopleLoading || deviceProfilesLoading) return;
+    if (matchedPerson) {
+      if (autoClaimedRef.current) return;
+      autoClaimedRef.current = true;
+      dispatch(confirmIdentity({ tripId, personId: matchedPerson.id, name: matchedPerson.name, isNew: false }));
+      return;
+    }
+    setOpen(true);
     // onForceOpenHandled is a fresh function identity every parent render;
     // it has no stale-closure risk (always just flips a boolean), so it's
     // deliberately left out of the deps to avoid re-running on every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [forceOpen, meIsValid, sessionConfirmed]);
+  }, [forceOpen, meIsValid, peopleLoading, deviceProfilesLoading, matchedPerson, tripId, dispatch]);
 
   // Close once a confirmIdentity dispatch has actually resolved (token
-  // bump), regardless of what meIsValid/sessionConfirmed already were
-  // before that dispatch — see the token comment in the identity reducer.
+  // bump), regardless of what meIsValid already was before that dispatch —
+  // see the token comment in the identity reducer.
   useEffect(() => {
     if (confirmedToken === seenTokenRef.current) return;
     seenTokenRef.current = confirmedToken;
     setOpen(false);
   }, [confirmedToken]);
-
-  const suggestedName = deviceProfiles[0]?.name;
-  const matchedPerson = suggestedName
-    ? people.find((person) => person.name.trim().toLowerCase() === suggestedName.toLowerCase())
-    : null;
 
   // Prime the add-new input when the picker opens, so confirming your
   // remembered name is one tap instead of retyping it in a new trip.
@@ -76,17 +86,13 @@ const IdentityModal = ({ people, tripId, forceOpen, onForceOpenHandled }) => {
   // going stale — using the functional setState form (not reading `name`
   // in the effect) so it never clobbers text the user already typed.
   useEffect(() => {
-    if (!open || mode !== 'picker') return;
+    if (!open) return;
     if (matchedPerson) {
       setName('');
       return;
     }
     setName((current) => current || suggestedName || '');
-  }, [open, mode, matchedPerson, suggestedName]);
-
-  function handleConfirmYes() {
-    dispatch(confirmIdentity({ tripId, personId: me.id, name: me.name, isNew: false }));
-  }
+  }, [open, matchedPerson, suggestedName]);
 
   function handleClaim(person) {
     dispatch(confirmIdentity({ tripId, personId: person.id, name: person.name, isNew: false }));
@@ -101,65 +107,47 @@ const IdentityModal = ({ people, tripId, forceOpen, onForceOpenHandled }) => {
   }
 
   return (
-    <Modal
-      open={open}
-      onClose={() => setOpen(false)}
-      title={mode === 'confirm' ? t('identity.confirmTitle') : t('identity.title')}
-    >
-      {mode === 'confirm' && me ? (
-        <div className="identity-modal__confirm">
-          <PersonBadge person={me} size="md" showName />
-          <div className="identity-modal__confirm-actions">
-            <Button type="button" variant="primary" onClick={handleConfirmYes}>
-              {t('identity.confirmYes')}
-            </Button>
-            <button type="button" className="identity-modal__confirm-no" onClick={() => setMode('picker')}>
-              {t('identity.confirmNo')}
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="identity-modal__picker" aria-label={t('identity.ariaLabel')}>
-          <p className="text-sm">{t('identity.subtitle')}</p>
+    <Modal open={open} onClose={() => setOpen(false)} title={t('identity.title')}>
+      <div className="identity-modal__picker" aria-label={t('identity.ariaLabel')}>
+        <p className="text-sm">{t('identity.subtitle')}</p>
 
-          {people.length > 0 && (
-            <ul className="identity-modal__people">
-              {people.map((person) => {
-                const isSuggested = matchedPerson?.id === person.id;
-                return (
-                  <li key={person.id}>
-                    <button
-                      type="button"
-                      className={`identity-modal__person${isSuggested ? ' identity-modal__person--suggested' : ''}`}
-                      onClick={() => handleClaim(person)}
-                    >
-                      <PersonBadge person={person} size="sm" showName />
-                      {isSuggested && (
-                        <span className="identity-modal__suggested-hint">{t('identity.suggestedHint')}</span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+        {people.length > 0 && (
+          <ul className="identity-modal__people">
+            {people.map((person) => {
+              const isSuggested = matchedPerson?.id === person.id;
+              return (
+                <li key={person.id}>
+                  <button
+                    type="button"
+                    className={`identity-modal__person${isSuggested ? ' identity-modal__person--suggested' : ''}`}
+                    onClick={() => handleClaim(person)}
+                  >
+                    <PersonBadge person={person} size="sm" showName />
+                    {isSuggested && (
+                      <span className="identity-modal__suggested-hint">{t('identity.suggestedHint')}</span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
-          <form className="identity-modal__form" onSubmit={handleAddSelf}>
-            <input
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder={t('identity.namePlaceholder')}
-              aria-label={t('identity.nameAria')}
-              maxLength={40}
-            />
-            <Button type="submit" variant="primary" size="sm" disabled={!name.trim() || adding}>
-              {t('identity.claim')}
-            </Button>
-          </form>
-          {error && <p className="identity-modal__error text-sm">{error}</p>}
-        </div>
-      )}
+        <form className="identity-modal__form" onSubmit={handleAddSelf}>
+          <input
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder={t('identity.namePlaceholder')}
+            aria-label={t('identity.nameAria')}
+            maxLength={40}
+          />
+          <Button type="submit" variant="primary" size="sm" disabled={!name.trim() || adding}>
+            {t('identity.claim')}
+          </Button>
+        </form>
+        {error && <p className="identity-modal__error text-sm">{error}</p>}
+      </div>
     </Modal>
   );
 };

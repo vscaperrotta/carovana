@@ -22,6 +22,7 @@ import { t } from '@utils/i18n';
 
 const AddPlaceForm = ({
   tripId,
+  places,
   pickMode,
   setPickMode,
   pendingLocation,
@@ -36,6 +37,7 @@ const AddPlaceForm = ({
   const error = useSelector((state) => state.places.error);
   const savedToken = useSelector(selectPlacesSavedToken);
 
+  const poiTaken = places.some((place) => place.type === 'poi');
   const [type, setType] = useState('stay');
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
@@ -70,7 +72,7 @@ const AddPlaceForm = ({
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (!me || !pendingLocation || !title.trim() || adding) return;
+    if (!me || !pendingLocation || !title.trim() || adding || (type === 'poi' && poiTaken)) return;
     dispatch(
       addPlaceRequest({
         tripId,
@@ -107,11 +109,14 @@ const AddPlaceForm = ({
           role="radio"
           aria-checked={type === 'poi'}
           className={type === 'poi' ? 'is-active' : ''}
+          disabled={poiTaken}
           onClick={() => setType('poi')}
         >
           {t('addPlace.poi')}
         </button>
       </div>
+
+      {poiTaken && <p className="text-sm add-place-form__hint">{t('addPlace.poiLimitHint')}</p>}
 
       <label>
         {t('addPlace.nameLabel')}
@@ -209,7 +214,11 @@ const AddPlaceForm = ({
 
       {error && <p className="add-place-form__error text-sm">{error}</p>}
 
-      <Button type="submit" variant="primary" disabled={!me || !pendingLocation || !title.trim() || adding}>
+      <Button
+        type="submit"
+        variant="primary"
+        disabled={!me || !pendingLocation || !title.trim() || adding || (type === 'poi' && poiTaken)}
+      >
         {adding ? t('addPlace.submitting') : t('addPlace.submit')}
       </Button>
 
@@ -222,6 +231,7 @@ const AddPlaceForm = ({
 
 AddPlaceForm.propTypes = {
   tripId: PropTypes.string.isRequired,
+  places: PropTypes.array.isRequired,
   pickMode: PropTypes.bool,
   setPickMode: PropTypes.func.isRequired,
   pendingLocation: PropTypes.object,

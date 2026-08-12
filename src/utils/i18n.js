@@ -84,6 +84,8 @@ const strings = {
   'places.sectionStays': { it: 'Alloggi', en: 'Stays' },
   'places.sectionPois': { it: 'Punti di interesse', en: 'Points of interest' },
   'places.openLink': { it: 'Apri link', en: 'Open link' },
+  'places.copyAddressAria': { it: 'Copia indirizzo', en: 'Copy address' },
+  'places.openMapsAria': { it: 'Apri su Maps', en: 'Open in Maps' },
   'places.removeConfirm': {
     it: 'Rimuovere "{{title}}" dal viaggio?',
     en: 'Remove "{{title}}" from the trip?',
@@ -133,19 +135,17 @@ const strings = {
     it: 'Scegli chi sei qui sopra per poter aggiungere un luogo.',
     en: 'Pick who you are above to add a place.',
   },
+  'addPlace.poiLimitHint': {
+    it: 'Il viaggio può avere un solo punto di interesse.',
+    en: 'A trip can have only one point of interest.',
+  },
 
-  'routes.fromLabel': { it: 'Da', en: 'From' },
-  'routes.toLabel': { it: 'A', en: 'To' },
-  'routes.submit': { it: 'Traccia percorso', en: 'Draw route' },
-  'routes.submitting': { it: 'Calcolo…', en: 'Calculating…' },
   'routes.empty': {
-    it: 'Nessun percorso ancora. Collega due luoghi a piedi.',
-    en: 'No routes yet. Connect two places on foot.',
+    it: 'Aggiungi un punto di interesse: i percorsi a piedi si calcolano da soli.',
+    en: 'Add a point of interest: walking routes are calculated automatically.',
   },
   'routes.distance': { it: '{{km}} km', en: '{{km}} km' },
   'routes.duration': { it: '{{min}} min', en: '{{min}} min' },
-  'routes.removeConfirm': { it: 'Rimuovere questo percorso?', en: 'Remove this route?' },
-  'routes.removeAria': { it: 'Rimuovi percorso', en: 'Remove route' },
   'routes.quotaLow': {
     it: 'Attenzione: solo {{remaining}} richieste ORS rimaste oggi.',
     en: 'Heads up: only {{remaining}} ORS requests left today.',
@@ -163,9 +163,6 @@ const strings = {
   },
   'identity.nameAria': { it: 'Il tuo nome', en: 'Your name' },
   'identity.claim': { it: 'Sono io', en: "That's me" },
-  'identity.confirmTitle': { it: 'Sei ancora tu?', en: 'Still you?' },
-  'identity.confirmYes': { it: 'Sì, sono io', en: "Yes, that's me" },
-  'identity.confirmNo': { it: 'No, cambia', en: 'No, switch' },
   'identity.suggestedHint': { it: 'Suggerito', en: 'Suggested' },
 
   'vote.hint': { it: 'Scegli chi sei per votare', en: 'Pick who you are to vote' },

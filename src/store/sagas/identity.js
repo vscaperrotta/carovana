@@ -4,8 +4,6 @@ import { actionTypes } from '@store/actions/identity.js';
 import { addPersonRequest } from '@store/actions/people.js';
 import { listDeviceProfiles, upsertDeviceProfile } from '@utils/deviceProfiles.js';
 
-const SESSION_KEY = 'carovana:identityConfirmedSession';
-
 function storageKey(tripId) {
   return `carovana:me:${tripId}`;
 }
@@ -39,14 +37,6 @@ function* clearIdentity(action) {
 function* loadDeviceProfiles() {
   const list = yield call(listDeviceProfiles);
   yield put(actions.deviceProfilesReceived(list));
-
-  let confirmed = false;
-  try {
-    confirmed = sessionStorage.getItem(SESSION_KEY) === '1';
-  } catch {
-    confirmed = false;
-  }
-  if (confirmed) yield put(actions.sessionConfirmed());
 }
 
 function* confirmIdentity(action) {
@@ -60,12 +50,6 @@ function* confirmIdentity(action) {
   }
 
   yield call(upsertDeviceProfile, name.trim());
-  try {
-    sessionStorage.setItem(SESSION_KEY, '1');
-  } catch {
-    // Private-browsing or storage disabled — session reconfirm will just
-    // fire again next mount, which is harmless.
-  }
   yield put(actions.sessionConfirmed());
 }
 

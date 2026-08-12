@@ -21,7 +21,11 @@ const ACTION_HANDLERS = {
 const initialState = {
   me: null,
   deviceProfiles: [],
-  deviceProfilesLoading: false,
+  // Starts true: Trip always dispatches loadDeviceProfiles on mount, so
+  // "not loading" should only ever mean "checked, here's the result" —
+  // never the pre-dispatch gap, which IdentityModal would otherwise read
+  // as "no device profile" and flash its picker open needlessly.
+  deviceProfilesLoading: true,
   // Bumped whenever an identity gets confirmed (claim/add/"still you") so
   // the modal can react (close) without depending on meIsValid/session
   // booleans that may already be true before the action — see selectors.

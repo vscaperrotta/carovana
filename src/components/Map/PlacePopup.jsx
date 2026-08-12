@@ -7,6 +7,7 @@
 import PropTypes from 'prop-types';
 import { ExternalLink } from 'lucide-react';
 import VoteButton from '@components/PlaceCard/VoteButton';
+import PlaceAddressActions from '@components/PlaceCard/PlaceAddressActions';
 import { locale, t } from '@utils/i18n';
 
 const PlacePopup = ({ tripId, place }) => (
@@ -17,7 +18,10 @@ const PlacePopup = ({ tripId, place }) => (
         <span className="map-popup__price">€{place.price.toLocaleString(locale)}</span>
       )}
     </div>
-    {place.address && <p className="map-popup__address">{place.address}</p>}
+    <p className="map-popup__address">
+      {place.address}
+      <PlaceAddressActions place={place} className="map-popup__address-actions" />
+    </p>
     <div className="map-popup__row">
       <VoteButton tripId={tripId} place={place} />
       {place.url && (

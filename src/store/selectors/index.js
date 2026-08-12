@@ -18,6 +18,7 @@ export const selectTripLoading = (state) => state.trip.loading;
 export const selectTripNotFound = (state) => state.trip.notFound;
 
 export const selectPeople = (state) => state.people.list;
+export const selectPeopleLoading = (state) => state.people.loading;
 export const selectPersonRenaming = (state) => state.people.renaming;
 export const selectPersonRenameError = (state) => state.people.renameError;
 export const selectPersonRenamedToken = (state) => state.people.renamedToken;
@@ -33,7 +34,6 @@ export const selectMe = (state) => state.identity.me;
 export const selectDeviceProfiles = (state) => state.identity.deviceProfiles;
 export const selectDeviceProfilesLoading = (state) => state.identity.deviceProfilesLoading;
 export const selectConfirmedToken = (state) => state.identity.confirmedToken;
-export const selectSessionConfirmed = (state) => state.identity.confirmedToken > 0;
 
 export const selectAddressResults = (state) => state.geocode.results;
 export const selectAddressSearching = (state) => state.geocode.searching;

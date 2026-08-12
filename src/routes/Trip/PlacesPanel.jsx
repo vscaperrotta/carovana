@@ -62,6 +62,7 @@ const PlacesPanel = ({ tripId, places, pickMode, setPickMode, pendingLocation, s
       {formOpen && (
         <AddPlaceForm
           tripId={tripId}
+          places={places}
           pickMode={pickMode}
           setPickMode={setPickMode}
           pendingLocation={pendingLocation}
