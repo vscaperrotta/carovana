@@ -14,7 +14,11 @@
   justify-content: space-between;
   gap: $space-md;
   padding-block: $space-sm;
-  min-height: $header-height;
+  // Fixed, not min-height: a taller sibling (e.g. TripMenu's tap-target
+  // button) must never grow the row, or every child recenters on a new
+  // band and drifts vertically page to page — badge position needs to be
+  // identical on Home (badge alone) and Trip (badge + name + menu).
+  height: $header-height;
 }
 
 .app-header__wordmark {

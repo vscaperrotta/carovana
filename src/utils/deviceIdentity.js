@@ -1,10 +1,12 @@
-// Device-local memory of names used on this browser, across trips — powers
-// a "suggested" pre-fill in the identity picker. Not synced, not shared,
-// unrelated to the per-trip Firestore `people` data.
+// Device-local identity: which name this browser is currently "logged in"
+// as (session-wide, spans every trip), plus the history of names ever used
+// here (powers the "known names" quick-pick when switching). Not synced,
+// not shared, unrelated to the per-trip Firestore `people` data — matching
+// a trip's Person by name is done elsewhere from this data.
 //
 // ponytail: every failure path (private-browsing quirks, indexedDB
 // unavailable, etc.) resolves to "no data" instead of rejecting, so the
-// feature just degrades to "no suggestion" rather than crashing a caller.
+// feature just degrades to "no identity" rather than crashing a caller.
 
 const DB_NAME = 'carovana';
 const DB_VERSION = 1;
@@ -42,7 +44,15 @@ export async function listDeviceProfiles() {
   }
 }
 
-export async function upsertDeviceProfile(name) {
+export async function getActiveProfile() {
+  const profiles = await listDeviceProfiles();
+  return profiles.find((profile) => profile.active) ?? null;
+}
+
+// Upserts a profile by name and marks it (exclusively) as the active
+// session identity — covers "pick a known name", "set a brand new name",
+// and "rename" with the same call, since they're all "this is who I am now".
+export async function setActiveIdentity(name) {
   const trimmed = name.trim();
   if (!trimmed) return null;
   const nameLower = trimmed.toLowerCase();
@@ -56,12 +66,25 @@ export async function upsertDeviceProfile(name) {
 
       lookup.onsuccess = () => {
         const existing = lookup.result;
-        const record = existing
-          ? { ...existing, name: trimmed, nameLower, lastUsedAt: Date.now() }
-          : { id: crypto.randomUUID(), name: trimmed, nameLower, lastUsedAt: Date.now() };
-        const put = store.put(record);
-        put.onsuccess = () => resolve(record);
-        put.onerror = () => reject(put.error);
+        const record = {
+          ...existing,
+          id: existing?.id ?? crypto.randomUUID(),
+          name: trimmed,
+          nameLower,
+          lastUsedAt: Date.now(),
+          active: true,
+        };
+
+        const allRequest = store.getAll();
+        allRequest.onsuccess = () => {
+          allRequest.result
+            .filter((profile) => profile.active && profile.id !== record.id)
+            .forEach((profile) => store.put({ ...profile, active: false }));
+          const put = store.put(record);
+          put.onsuccess = () => resolve(record);
+          put.onerror = () => reject(put.error);
+        };
+        allRequest.onerror = () => reject(allRequest.error);
       };
       lookup.onerror = () => reject(lookup.error);
     });

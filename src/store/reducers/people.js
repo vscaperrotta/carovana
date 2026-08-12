@@ -2,6 +2,15 @@ import { produce } from 'immer';
 import { actionTypes } from '@store/actions/people';
 
 const ACTION_HANDLERS = {
+  // Reset on every (re)subscribe, not just mount: navigating trip A -> trip
+  // B reuses this component/state without a remount, so without this reset
+  // `list`/`loading` would keep trip A's data around until B's first
+  // snapshot arrives — and `selectMe` matches against it live now, so that
+  // stale window could briefly resolve to trip A's person.
+  [actionTypes.SUBSCRIBE]: produce((draft) => {
+    draft.list = [];
+    draft.loading = true;
+  }),
   [actionTypes.RECEIVED]: produce((draft, action) => {
     draft.list = action.payload;
     draft.loading = false;

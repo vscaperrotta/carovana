@@ -13,11 +13,13 @@ import AppHeader from '@components/Layout';
 import Button from '@components/Button';
 import Modal from '@components/Modal';
 import DateRangePicker from '@components/DatePicker';
+import IdentityBadge from '@components/IdentityBadge';
 import {
   subscribeTrips,
   createTripRequest,
   clearCreatedTrip,
 } from '@store/actions/trips';
+import { loadIdentity } from '@store/actions/identity';
 import {
   selectTrips,
   selectTripsLoading,
@@ -36,6 +38,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(subscribeTrips());
+    dispatch(loadIdentity());
   }, [dispatch]);
 
   // Nearest-first: dated trips ordered chronologically, undated trips pushed to the end.
@@ -48,7 +51,9 @@ const Home = () => {
 
   return (
     <>
-      <AppHeader />
+      <AppHeader>
+        <IdentityBadge autoOpenOnFirstVisit />
+      </AppHeader>
       <main className="container home">
         <div className="home__intro">
           <h1 className="font-display">{t('home.title')}</h1>

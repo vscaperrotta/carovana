@@ -19,9 +19,6 @@ export const selectTripNotFound = (state) => state.trip.notFound;
 
 export const selectPeople = (state) => state.people.list;
 export const selectPeopleLoading = (state) => state.people.loading;
-export const selectPersonRenaming = (state) => state.people.renaming;
-export const selectPersonRenameError = (state) => state.people.renameError;
-export const selectPersonRenamedToken = (state) => state.people.renamedToken;
 export const selectPersonDeleteError = (state) => state.people.deleteError;
 
 export const selectPlaces = (state) => state.places.list;
@@ -30,10 +27,20 @@ export const selectPlaceEditing = (state) => state.places.editing;
 export const selectPlaceEditError = (state) => state.places.editError;
 export const selectPlaceEditedToken = (state) => state.places.editedToken;
 
-export const selectMe = (state) => state.identity.me;
-export const selectDeviceProfiles = (state) => state.identity.deviceProfiles;
-export const selectDeviceProfilesLoading = (state) => state.identity.deviceProfilesLoading;
-export const selectConfirmedToken = (state) => state.identity.confirmedToken;
+export const selectIdentityProfile = (state) => state.identity.profile;
+export const selectIdentityLoading = (state) => state.identity.profileLoading;
+export const selectDeviceProfiles = (state) => state.identity.profiles;
+export const selectDeviceProfilesLoading = (state) => state.identity.profilesLoading;
+
+// "Am I in this trip?" — derived, not stored: matches the session identity's
+// name against this trip's current people list. No match means you haven't
+// joined (or your name changed) — never an error state to persist.
+export const selectMe = (state) => {
+  const name = state.identity.profile?.name;
+  if (!name) return null;
+  const nameLower = name.trim().toLowerCase();
+  return state.people.list.find((person) => person.name.trim().toLowerCase() === nameLower) ?? null;
+};
 
 export const selectAddressResults = (state) => state.geocode.results;
 export const selectAddressSearching = (state) => state.geocode.searching;

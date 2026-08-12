@@ -50,7 +50,6 @@ const strings = {
     it: 'Il link potrebbe essere sbagliato o il viaggio è stato rimosso.',
     en: 'The link might be wrong, or the trip was removed.',
   },
-  'trip.change': { it: 'Cambia', en: 'Switch' },
   'trip.backToList': { it: 'Torna ai viaggi', en: 'Back to trips' },
   'trip.places': { it: 'Luoghi', en: 'Places' },
   'trip.people': { it: 'Persone', en: 'People' },
@@ -100,10 +99,6 @@ const strings = {
   'people.placeholder': { it: 'Aggiungi una persona al viaggio', en: 'Add a person to the trip' },
   'people.add': { it: 'Aggiungi', en: 'Add' },
   'people.you': { it: 'Tu', en: 'You' },
-  'people.renameAria': { it: 'Rinomina {{name}}', en: 'Rename {{name}}' },
-  'people.renameTitle': { it: 'Rinomina persona', en: 'Rename person' },
-  'people.renameSubmit': { it: 'Salva', en: 'Save' },
-  'people.renaming': { it: 'Salvo…', en: 'Saving…' },
   'people.removeAria': { it: 'Rimuovi {{name}}', en: 'Remove {{name}}' },
   'people.removeConfirm': {
     it: 'Rimuovere {{name}} dal viaggio? I suoi voti verranno rimossi.',
@@ -151,11 +146,12 @@ const strings = {
     en: 'Heads up: only {{remaining}} ORS requests left today.',
   },
 
-  'identity.title': { it: 'Chi sei tu in questo viaggio?', en: 'Who are you on this trip?' },
-  'identity.subtitle': {
-    it: 'Scegli il tuo nome per aggiungere luoghi e votare. Serve solo su questo dispositivo.',
-    en: 'Pick your name to add places and vote. Only used on this device.',
+  'identity.joinTitle': { it: 'Unisciti a questo viaggio', en: 'Join this trip' },
+  'identity.joinSubtitle': {
+    it: 'Conferma chi sei per aggiungere luoghi e votare in questo viaggio.',
+    en: 'Confirm who you are to add places and vote on this trip.',
   },
+  'identity.joinAs': { it: 'Sono {{name}}, unisciti', en: "I'm {{name}}, join" },
   'identity.ariaLabel': { it: 'Scegli chi sei', en: 'Pick who you are' },
   'identity.namePlaceholder': {
     it: 'Non ci sei ancora? Scrivi il tuo nome',
@@ -163,7 +159,15 @@ const strings = {
   },
   'identity.nameAria': { it: 'Il tuo nome', en: 'Your name' },
   'identity.claim': { it: 'Sono io', en: "That's me" },
-  'identity.suggestedHint': { it: 'Suggerito', en: 'Suggested' },
+
+  'identity.setNameCta': { it: 'Imposta il tuo nome', en: 'Set your name' },
+  'identity.changeAria': { it: 'Cambia identità', en: 'Switch identity' },
+  'identity.settingsTitle': { it: 'Chi sei?', en: 'Who are you?' },
+  'identity.settingsSubtitle': {
+    it: 'Il tuo nome su questo dispositivo, usato in tutti i viaggi.',
+    en: 'Your name on this device, used across every trip.',
+  },
+  'identity.settingsSubmit': { it: 'Conferma', en: 'Confirm' },
 
   'vote.hint': { it: 'Scegli chi sei per votare', en: 'Pick who you are to vote' },
 
