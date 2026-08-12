@@ -12,6 +12,7 @@ import Button from '@components/Button';
 import Modal from '@components/Modal';
 import PersonBadge from '@components/PersonBadge';
 import VoteButton from '@components/PlaceCard/VoteButton';
+import PlaceAddressActions from '@components/PlaceCard/PlaceAddressActions';
 import { deletePlaceRequest, editPlaceRequest, clearPlacesError } from '@store/actions/places';
 import { searchAddressRequest, clearAddressSearch } from '@store/actions/geocode';
 import {
@@ -50,7 +51,10 @@ const PlaceCard = ({ tripId, place, isTopVoted }) => {
             </span>
           )}
         </div>
-        {place.address && <p className="text-sm place-card__address">{place.address}</p>}
+        <p className="text-sm place-card__address">
+          {place.address}
+          <PlaceAddressActions place={place} className="place-card__address-actions" />
+        </p>
         <div className="place-card__meta">
           <PersonBadge person={{ id: place.addedBy, name: place.addedByName }} size="sm" showName />
           {place.url && (

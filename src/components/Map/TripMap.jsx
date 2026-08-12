@@ -68,33 +68,45 @@ ClickHandler.propTypes = {
   onPick: PropTypes.func.isRequired,
 };
 
-const RouteLine = ({ route }) => {
+const RouteLine = ({ route, active, onActivate }) => {
   const [hovered, setHovered] = useState(false);
   const info = `${formatDistance(route.distanceMeters)} · ${formatDuration(route.durationSeconds)}`;
+  const emphasized = hovered || active;
 
   return (
-    <Polyline
-      positions={route.geometry}
-      pathOptions={{
-        color: '#38bdf8',
-        weight: hovered ? 6 : 4,
-        opacity: hovered ? 1 : 0.85,
-      }}
-      eventHandlers={{
-        mouseover: () => setHovered(true),
-        mouseout: () => setHovered(false),
-      }}
-    >
-      <Tooltip sticky className="route-tooltip">
-        {info}
-      </Tooltip>
-      <Popup>{info}</Popup>
-    </Polyline>
+    <>
+      {/* Invisible hit target: wide and finger-sized regardless of the visual line weight. */}
+      <Polyline
+        positions={route.geometry}
+        pathOptions={{ color: '#38bdf8', weight: 20, opacity: 0 }}
+        eventHandlers={{
+          mouseover: () => setHovered(true),
+          mouseout: () => setHovered(false),
+          click: () => onActivate(route.id),
+        }}
+      >
+        <Tooltip sticky className="route-tooltip">
+          {info}
+        </Tooltip>
+        <Popup>{info}</Popup>
+      </Polyline>
+      <Polyline
+        positions={route.geometry}
+        interactive={false}
+        pathOptions={{
+          color: '#38bdf8',
+          weight: emphasized ? 6 : 4,
+          opacity: emphasized ? 1 : 0.4,
+        }}
+      />
+    </>
   );
 };
 
 RouteLine.propTypes = {
   route: PropTypes.object.isRequired,
+  active: PropTypes.bool,
+  onActivate: PropTypes.func.isRequired,
 };
 
 const TripMap = ({ tripId, places, routes, pickMode, onPick }) => {
@@ -111,6 +123,26 @@ const TripMap = ({ tripId, places, routes, pickMode, onPick }) => {
     return bestCount > 0 ? best : null;
   }, [places]);
 
+  // Per-session UI preference only — not persisted, resets to the default on reload.
+  const [activeRouteId, setActiveRouteId] = useState(null);
+
+  const defaultActiveRouteId = useMemo(() => {
+    const stays = places.filter((place) => place.type === 'stay');
+    if (stays.length === 0) return null;
+    let bestStay = stays[0];
+    let bestCount = Object.keys(bestStay.votes || {}).length;
+    for (const stay of stays) {
+      const count = Object.keys(stay.votes || {}).length;
+      if (count > bestCount) {
+        bestCount = count;
+        bestStay = stay;
+      }
+    }
+    return routes.find((route) => route.fromPlaceId === bestStay.id)?.id ?? null;
+  }, [places, routes]);
+
+  const effectiveActiveRouteId = activeRouteId ?? defaultActiveRouteId;
+
   return (
     <MapContainer
       center={DEFAULT_CENTER}
@@ -125,7 +157,12 @@ const TripMap = ({ tripId, places, routes, pickMode, onPick }) => {
       <FitBounds places={places} />
       <ClickHandler active={pickMode} onPick={onPick} />
       {routes.map((route) => (
-        <RouteLine key={route.id} route={route} />
+        <RouteLine
+          key={route.id}
+          route={route}
+          active={route.id === effectiveActiveRouteId}
+          onActivate={setActiveRouteId}
+        />
       ))}
       {places.map((place) => (
         <Marker

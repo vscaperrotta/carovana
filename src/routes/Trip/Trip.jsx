@@ -16,7 +16,7 @@ import TripMenu from '@components/TripMenu';
 import { subscribeTrip } from '@store/actions/trip';
 import { subscribePeople } from '@store/actions/people';
 import { subscribePlaces } from '@store/actions/places';
-import { subscribeRoutes } from '@store/actions/routes';
+import { subscribeRoutes, addRouteRequest } from '@store/actions/routes';
 import { loadIdentity, loadDeviceProfiles } from '@store/actions/identity';
 import { reverseGeocodeRequest } from '@store/actions/geocode';
 import {
@@ -26,6 +26,8 @@ import {
   selectPeople,
   selectPlaces,
   selectRoutes,
+  selectRoutesAdding,
+  selectRoutesError,
   selectMe,
   selectReverseGeocode,
 } from '@store/selectors';
@@ -45,6 +47,8 @@ const Trip = () => {
   const people = useSelector(selectPeople);
   const places = useSelector(selectPlaces);
   const routes = useSelector(selectRoutes);
+  const routesAdding = useSelector(selectRoutesAdding);
+  const routesError = useSelector(selectRoutesError);
   const me = useSelector(selectMe);
   const reverse = useSelector(selectReverseGeocode);
 
@@ -107,6 +111,46 @@ const Trip = () => {
       places.some((place) => place.id === route.fromPlaceId) &&
       places.some((place) => place.id === route.toPlaceId),
   );
+
+  // Session-only "already requested" guard: the Firestore write is async, so
+  // routes won't reflect it immediately and the effect below would re-fire
+  // for the same stay on every render until it does.
+  const autoRequestedStayIdsRef = useRef(new Set());
+  const wasAddingRoutesRef = useRef(routesAdding);
+
+  useEffect(() => {
+    // ponytail: no per-request correlation id on ADD_FAILURE, so a failed
+    // request clears the whole guard set rather than just its own stay.
+    // Safe because already-succeeded stays are excluded by the `routes`
+    // check below regardless, so this only re-opens retries.
+    if (wasAddingRoutesRef.current && !routesAdding && routesError) {
+      autoRequestedStayIdsRef.current.clear();
+    }
+    wasAddingRoutesRef.current = routesAdding;
+  }, [routesAdding, routesError]);
+
+  useEffect(() => {
+    const pois = places.filter((place) => place.type === 'poi');
+    if (pois.length !== 1) return;
+    const [poi] = pois;
+    const stays = places.filter((place) => place.type === 'stay');
+    for (const stay of stays) {
+      const hasRoute = routes.some(
+        (route) => route.fromPlaceId === stay.id && route.toPlaceId === poi.id,
+      );
+      if (hasRoute || autoRequestedStayIdsRef.current.has(stay.id)) continue;
+      autoRequestedStayIdsRef.current.add(stay.id);
+      dispatch(
+        addRouteRequest({
+          tripId,
+          fromPlace: stay,
+          toPlace: poi,
+          addedBy: poi.addedBy,
+          addedByName: poi.addedByName,
+        }),
+      );
+    }
+  }, [dispatch, tripId, places, routes]);
 
   const handlePick = useCallback(
     (lat, lng) => {
@@ -244,9 +288,7 @@ const Trip = () => {
                 />
               )}
               {tab === 'people' && <PeoplePanel tripId={tripId} people={people} />}
-              {tab === 'routes' && (
-                <RoutesPanel tripId={tripId} places={places} routes={visibleRoutes} />
-              )}
+              {tab === 'routes' && <RoutesPanel places={places} routes={visibleRoutes} />}
             </div>
           </div>
         </div>

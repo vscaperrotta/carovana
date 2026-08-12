@@ -50,8 +50,36 @@
 }
 
 .place-card__address {
+  display: flex;
+  align-items: center;
+  gap: $space-3xs;
   color: var(--color-muted);
   margin-top: 0.15rem;
+}
+
+.place-card__address-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3xs;
+  flex-shrink: 0;
+
+  button,
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: $radius-sm;
+    color: var(--color-muted);
+
+    @include focus-ring;
+
+    &:hover {
+      background: var(--color-surface);
+      color: var(--color-ink);
+    }
+  }
 }
 
 .place-card__meta {
