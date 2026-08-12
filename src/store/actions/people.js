@@ -24,7 +24,7 @@ export const actionTypes = {
 
 export const subscribePeople = (tripId) => createAction(actionTypes.SUBSCRIBE, tripId);
 export const peopleReceived = (list) => createAction(actionTypes.RECEIVED, list);
-// payload: { tripId, name, claim } — `claim` sets the added person as "me"
+// payload: { tripId, name }
 export const addPersonRequest = (payload) => createAction(actionTypes.ADD_REQUEST, payload);
 export const addPersonSuccess = () => createAction(actionTypes.ADD_SUCCESS);
 export const addPersonFailure = (error) => createAction(actionTypes.ADD_FAILURE, error);

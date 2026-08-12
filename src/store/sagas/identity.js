@@ -1,65 +1,46 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import * as actions from '@store/actions/identity.js';
 import { actionTypes } from '@store/actions/identity.js';
-import { addPersonRequest } from '@store/actions/people.js';
-import { listDeviceProfiles, upsertDeviceProfile } from '@utils/deviceProfiles.js';
+import { addPersonRequest, renamePersonRequest } from '@store/actions/people.js';
+import { selectMe, selectPeople } from '@store/selectors';
+import { getActiveProfile, listDeviceProfiles, setActiveIdentity } from '@utils/deviceIdentity.js';
 
-function storageKey(tripId) {
-  return `carovana:me:${tripId}`;
+function* load() {
+  const [profile, profiles] = yield all([call(getActiveProfile), call(listDeviceProfiles)]);
+  yield put(actions.identityResolved(profile));
+  yield put(actions.profilesReceived(profiles));
 }
 
-function readStoredMe(tripId) {
-  try {
-    const raw = localStorage.getItem(storageKey(tripId));
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
+function* applySetName(action) {
+  const { name, tripId } = action.payload;
+  if (tripId) {
+    // Read the trip match *before* the identity changes, so we know which
+    // Person (if any) to keep in sync under the old name.
+    const currentMe = yield select(selectMe);
+    if (currentMe) {
+      yield put(renamePersonRequest({ tripId, personId: currentMe.id, name }));
+    }
   }
+  const profile = yield call(setActiveIdentity, name);
+  yield put(actions.identityResolved(profile));
 }
 
-function* loadIdentity(action) {
-  const tripId = action.payload;
-  yield put(actions.identityResolved(readStoredMe(tripId)));
-}
+function* joinTrip(action) {
+  const { tripId, name } = action.payload;
+  const profile = yield call(setActiveIdentity, name);
+  yield put(actions.identityResolved(profile));
 
-function* setIdentity(action) {
-  const { tripId, person } = action.payload;
-  localStorage.setItem(storageKey(tripId), JSON.stringify(person));
-  yield put(actions.identityResolved(person));
-}
-
-function* clearIdentity(action) {
-  const tripId = action.payload;
-  localStorage.removeItem(storageKey(tripId));
-  yield put(actions.identityResolved(null));
-}
-
-function* loadDeviceProfiles() {
-  const list = yield call(listDeviceProfiles);
-  yield put(actions.deviceProfilesReceived(list));
-}
-
-function* confirmIdentity(action) {
-  const { tripId, personId, name, isNew } = action.payload;
-  if (isNew) {
-    // The people saga owns the Firestore write and dispatches setIdentity
-    // itself on success — same "add + claim" path IdentityGate already used.
-    yield put(addPersonRequest({ tripId, name, claim: true }));
-  } else {
-    yield put(actions.setIdentity({ tripId, person: { id: personId, name } }));
-  }
-
-  yield call(upsertDeviceProfile, name.trim());
-  yield put(actions.sessionConfirmed());
+  const people = yield select(selectPeople);
+  const nameLower = name.trim().toLowerCase();
+  const exists = people.some((person) => person.name.trim().toLowerCase() === nameLower);
+  if (!exists) yield put(addPersonRequest({ tripId, name }));
 }
 
 // @generator saga:method
 
 export default function* identitySaga() {
-  yield takeEvery(actionTypes.LOAD, loadIdentity);
-  yield takeEvery(actionTypes.SET, setIdentity);
-  yield takeEvery(actionTypes.CLEAR, clearIdentity);
-  yield takeEvery(actionTypes.LOAD_DEVICE_PROFILES, loadDeviceProfiles);
-  yield takeEvery(actionTypes.CONFIRM, confirmIdentity);
+  yield takeEvery(actionTypes.LOAD, load);
+  yield takeEvery(actionTypes.SET_NAME, applySetName);
+  yield takeEvery(actionTypes.JOIN_TRIP, joinTrip);
   // @generator saga:watch
 }

@@ -9,15 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GripVertical, MapPinned, Route, Users } from 'lucide-react';
 import AppHeader from '@components/Layout';
-import PersonBadge from '@components/PersonBadge';
 import TripMap from '@components/Map';
-import IdentityModal from '@components/IdentityModal';
+import IdentityBadge from '@components/IdentityBadge';
+import TripJoinModal from '@components/TripJoinModal';
 import TripMenu from '@components/TripMenu';
 import { subscribeTrip } from '@store/actions/trip';
 import { subscribePeople } from '@store/actions/people';
 import { subscribePlaces } from '@store/actions/places';
 import { subscribeRoutes, addRouteRequest } from '@store/actions/routes';
-import { loadIdentity, loadDeviceProfiles } from '@store/actions/identity';
+import { loadIdentity } from '@store/actions/identity';
 import { reverseGeocodeRequest } from '@store/actions/geocode';
 import {
   selectTrip,
@@ -28,7 +28,6 @@ import {
   selectRoutes,
   selectRoutesAdding,
   selectRoutesError,
-  selectMe,
   selectReverseGeocode,
 } from '@store/selectors';
 import { t } from '@utils/i18n';
@@ -49,14 +48,12 @@ const Trip = () => {
   const routes = useSelector(selectRoutes);
   const routesAdding = useSelector(selectRoutesAdding);
   const routesError = useSelector(selectRoutesError);
-  const me = useSelector(selectMe);
   const reverse = useSelector(selectReverseGeocode);
 
   const [tab, setTab] = useState('places');
   const [pickMode, setPickMode] = useState(false);
   const [pendingLocation, setPendingLocation] = useState(null);
   const [panelWidth, setPanelWidth] = useState(null);
-  const [identityForceOpen, setIdentityForceOpen] = useState(false);
   const draggingRef = useRef(false);
 
   const startResize = useCallback((e) => {
@@ -92,8 +89,7 @@ const Trip = () => {
     dispatch(subscribePeople(tripId));
     dispatch(subscribePlaces(tripId));
     dispatch(subscribeRoutes(tripId));
-    dispatch(loadIdentity(tripId));
-    dispatch(loadDeviceProfiles());
+    dispatch(loadIdentity());
   }, [dispatch, tripId]);
 
   // Fill the pending pin's address once the reverse geocode resolves.
@@ -182,25 +178,9 @@ const Trip = () => {
             <TripMenu trip={trip} redirectOnDelete />
           </>
         )}
-        {me && (
-          <span className="trip-header__identity">
-            <button
-              type="button"
-              className="trip-header__avatar-btn"
-              onClick={() => setIdentityForceOpen(true)}
-              aria-label={t('trip.change')}
-            >
-              <PersonBadge person={me} size="sm" showName />
-            </button>
-            <button
-              type="button"
-              className="text-sm trip-header__change"
-              onClick={() => setIdentityForceOpen(true)}
-            >
-              {t('trip.change')}
-            </button>
-          </span>
-        )}
+        <span className="trip-header__identity">
+          <IdentityBadge tripId={tripId} />
+        </span>
       </AppHeader>
 
       {!loading && trip && (
@@ -233,12 +213,7 @@ const Trip = () => {
                 <GripVertical size={14} strokeWidth={2} aria-hidden="true" />
               </span>
             </div>
-            <IdentityModal
-              people={people}
-              tripId={tripId}
-              forceOpen={identityForceOpen}
-              onForceOpenHandled={() => setIdentityForceOpen(false)}
-            />
+            <TripJoinModal people={people} tripId={tripId} />
 
             <div className="trip-tabs" role="tablist">
               <button
