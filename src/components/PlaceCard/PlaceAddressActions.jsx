@@ -22,26 +22,17 @@ const PlaceAddressActions = ({ place, className }) => {
 
   return (
     <span className={className}>
-      <button
-        type="button"
-        onClick={handleCopy}
-        aria-label={t('places.copyAddressAria')}
-        title={t('places.copyAddressAria')}
-      >
+      <button type="button" onClick={handleCopy}>
         {copied ? (
           <Check size={13} strokeWidth={2} aria-hidden="true" />
         ) : (
           <Copy size={13} strokeWidth={2} aria-hidden="true" />
         )}
+        {copied ? t('places.copiedAddress') : t('places.copyAddressAria')}
       </button>
-      <a
-        href={mapsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t('places.openMapsAria')}
-        title={t('places.openMapsAria')}
-      >
+      <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
         <MapPin size={13} strokeWidth={2} aria-hidden="true" />
+        {t('places.openMapsAria')}
       </a>
     </span>
   );

@@ -65,12 +65,11 @@ const Home = () => {
             <Plus size={18} strokeWidth={2.5} aria-hidden="true" />
             {t('home.newTrip')}
           </Button>
+          <button type="button" className="home__feedback-cta" onClick={() => setFeedbackOpen(true)}>
+            <MessageSquareHeart size={16} strokeWidth={2} aria-hidden="true" />
+            {t('home.feedbackCta')}
+          </button>
         </div>
-
-        <button type="button" className="home__feedback-cta" onClick={() => setFeedbackOpen(true)}>
-          <MessageSquareHeart size={16} strokeWidth={2} aria-hidden="true" />
-          {t('home.feedbackCta')}
-        </button>
 
         {!loading && trips.length === 0 && (
           <div className="home__empty">

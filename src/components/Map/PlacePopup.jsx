@@ -18,10 +18,8 @@ const PlacePopup = ({ tripId, place }) => (
         <span className="map-popup__price">€{place.price.toLocaleString(locale)}</span>
       )}
     </div>
-    <p className="map-popup__address">
-      {place.address}
-      <PlaceAddressActions place={place} className="map-popup__address-actions" />
-    </p>
+    <p className="map-popup__address">{place.address}</p>
+    <PlaceAddressActions place={place} className="map-popup__address-actions" />
     <div className="map-popup__row">
       <VoteButton tripId={tripId} place={place} />
       {place.url && (

@@ -10,10 +10,12 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, Compass, Users } from 'lucide-react';
 import TripMenu from '@components/TripMenu';
 import { countPeople } from '@api/people/people';
-import { formatDateRange } from '@utils/date';
+import { formatDateRange, isPastTrip } from '@utils/date';
+import { t } from '@utils/i18n';
 
 const TripCard = ({ trip }) => {
   const dateLabel = formatDateRange(trip.startDate, trip.endDate);
+  const past = isPastTrip(trip);
   const [peopleCount, setPeopleCount] = useState(null);
 
   useEffect(() => {
@@ -27,13 +29,16 @@ const TripCard = ({ trip }) => {
   }, [trip.id]);
 
   return (
-    <div className="trip-card">
+    <div className={`trip-card${past ? ' trip-card--past' : ''}`}>
       <Link to={`/viaggio/${trip.id}`} className="trip-card__link">
         <span className="trip-card__icon" aria-hidden="true">
           <Compass size={20} strokeWidth={2} />
         </span>
         <span className="trip-card__body">
-          <span className="trip-card__name">{trip.name}</span>
+          <span className="trip-card__name-row">
+            <span className="trip-card__name">{trip.name}</span>
+            {past && <span className="trip-card__past-badge">{t('home.pastTrip')}</span>}
+          </span>
           <span className="trip-card__meta text-sm">
             {dateLabel && <span className="trip-card__date">{dateLabel}</span>}
             {peopleCount !== null && (
