@@ -51,10 +51,8 @@ const PlaceCard = ({ tripId, place, isTopVoted }) => {
             </span>
           )}
         </div>
-        <p className="text-sm place-card__address">
-          {place.address}
-          <PlaceAddressActions place={place} className="place-card__address-actions" />
-        </p>
+        <p className="text-sm place-card__address">{place.address}</p>
+        <PlaceAddressActions place={place} className="place-card__address-actions" />
         <div className="place-card__meta">
           <PersonBadge person={{ id: place.addedBy, name: place.addedByName }} size="sm" showName />
           {place.url && (

@@ -42,6 +42,17 @@ export function formatDateLong(iso) {
     : `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
+// A trip counts as past once its last relevant day (end date, or start
+// date if there's no end) is strictly before today — a trip ending today
+// is still current, not past yet.
+export function isPastTrip(trip) {
+  const lastDay = isoToDate(trip.endDate || trip.startDate);
+  if (!lastDay) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return lastDay < today;
+}
+
 export function isSameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }

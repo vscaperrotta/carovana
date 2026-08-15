@@ -12,6 +12,7 @@ if (typeof document !== 'undefined') {
 
 const strings = {
   'home.title': { it: 'I tuoi viaggi', en: 'Your trips' },
+  'home.pastTrip': { it: 'Passato', en: 'Past' },
   'home.subtitle': {
     it: 'Crea un viaggio, condividi il link, decidete insieme dove stare.',
     en: 'Create a trip, share the link, decide together where to stay.',
@@ -84,6 +85,7 @@ const strings = {
   'places.sectionPois': { it: 'Punti di interesse', en: 'Points of interest' },
   'places.openLink': { it: 'Apri link', en: 'Open link' },
   'places.copyAddressAria': { it: 'Copia indirizzo', en: 'Copy address' },
+  'places.copiedAddress': { it: 'Copiato!', en: 'Copied!' },
   'places.openMapsAria': { it: 'Apri su Maps', en: 'Open in Maps' },
   'places.removeConfirm': {
     it: 'Rimuovere "{{title}}" dal viaggio?',
