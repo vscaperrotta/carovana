@@ -12,6 +12,11 @@
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
 </p>
 
+<p align="center">
+  <img src="./docs/home.png" alt="Home" width="360">
+  <img src="./docs/detail.png" alt="Home" width="360">
+</p>
+
 ## What it does
 
 - Create a trip (name + dates), share the link — no account needed. Edit the
